@@ -1,127 +1,184 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../FirebaseConfig';
 import { useNavigation } from '@react-navigation/native';
+import musicLogo from '../assets/logo.jpg';
 
-const Register = () => {
+export default function Register() {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+
+  const validateEmail = (email) => {
+    const emailRegex = /^(19|20)\d{6}@isptec.co.ao$/;
+    return emailRegex.test(email);
+
+  };
 
   const navigation = useNavigation();
 
+  function handleLogin(){
+    navigation.navigate("Login");
+}
+
   const handleRegister = async () => {
-    try {
-      // Verifica se já existe um usuário com o mesmo nome de usuário e senha na base de dados
-      const querySnapshot = await getDocs(
-        query(
-          collection(FIREBASE_DB, 'pessoa'),
-          where('username', '==', username),
-          where('password', '==', password)
-        )
-      );
-  
-      if (!querySnapshot.empty) {
-        console.log('Usuário já existe na base de dados');
-        return;
+
+    if (validateEmail(email)) {
+
+      try {
+        // Verifica se já existe um usuário com o mesmo nome de usuário e senha na base de dados
+        const querySnapshot = await getDocs(
+          query(
+            collection(FIREBASE_DB, 'pessoa'),
+            where('email', '==', email),
+            where('password', '==', password)
+          )
+        );
+
+        if (!querySnapshot.empty) {
+          console.log('Usuário já existe na base de dados');
+          alert('Esta conta já existe.')
+          return;
+        }
+
+        // Cria um novo documento na coleção 'pessoa' com os dados fornecidos
+        const docRef = await addDoc(collection(FIREBASE_DB, 'pessoa'), {
+          name,
+          surname,
+          password,
+          email,
+        });
+        console.log('Nova pessoa criada com ID:', docRef.id);
+        navigation.navigate('Login');
+      } catch (error) {
+        console.log('Erro ao criar uma nova pessoa:', error);
       }
-  
-      // Cria um novo documento na coleção 'pessoa' com os dados fornecidos
-      const docRef = await addDoc(collection(FIREBASE_DB, 'pessoa'), {
-        username,
-        password,
-        email,
-      });
-      console.log('Nova pessoa criada com ID:', docRef.id);
-      navigation.navigate('VideoListScreen');
-    } catch (error) {
-      console.log('Erro ao criar uma nova pessoa:', error);
+    } else {
+      alert('Formato de e-mail inválido. Por favor introduza um e-mail do formato ISPTEC.');
+
     }
   };
 
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email"
-          placeholderTextColor={'grey'}
-          value={email}
-          onChangeText={setEmail}
-        />
+    <>
+      <View style={styles.container}>
+
+
+        <ScrollView>
+
+          <Image style={styles.logo} source={musicLogo} />
+
+
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Name"
+              placeholderTextColor="#fff"
+              value={name}
+              onChangeText={(text) => setName(text)}
+            />
+          </View>
+
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Surname"
+              placeholderTextColor="#fff"
+              value={surname}
+              onChangeText={(text) => setSurname(text)}
+            />
+          </View>
+
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Email"
+              placeholderTextColor="#fff"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Password"
+              placeholderTextColor="#fff"
+              secureTextEntry
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+            />
+          </View>
+          <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+            <Text style={styles.registerButtonText}>REGISTER</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={handleLogin}>
+            <Text style={styles.registerText}>Já tem conta? Faça login</Text>
+          </TouchableOpacity>
+
+
+        </ScrollView>
+
+
+
       </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your password"
-          placeholderTextColor={'grey'}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Username</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your username"
-          placeholderTextColor={'grey'}
-          value={username}
-          onChangeText={setUsername}
-        />
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Register</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
+    </>
+  )
+
+
+
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    backgroundColor: '#FFF7D1',
   },
-  title: {
-    fontSize: 20,
+  logo: {
+    width: 300,
+    height: 200,
+    marginTop: 100,
+    marginBottom: 50,
+  },
+  inputView: {
+    width: 300,
+    backgroundColor: 'pink',
+    borderRadius: 25,
+    height: 50,
     marginBottom: 20,
-    textAlign: 'center',
+    justifyContent: 'center',
+    padding: 20,
   },
-  inputContainer: {
-    marginBottom: 10,
+  inputText: {
+    height: 50,
+    color: 'white',
   },
-  inputLabel: {
+  registerButton: {
+    width: 100,
+    backgroundColor: 'pink',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  registerButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 5,
   },
-  input: {
-    width: '100%',
-    height: 40,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 0,
-    paddingHorizontal: 10,
-  },
-  button: {
-    width: '100%',
-    marginTop: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#FFF7D1',
-    borderRadius: 0,
-  },
-  buttonText: {
-    color: 'black',
+  registerText: {
+    color: 'pink',
     fontSize: 16,
-    textAlign: 'center',
+    opacity: 0.7,
+    alignSelf: 'center',
   },
 });
 
-export default Register;

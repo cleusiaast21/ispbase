@@ -1,184 +1,168 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { FIREBASE_STORAGE, FIREBASE_DB } from '../../FirebaseConfig';
 import { useNavigation } from '@react-navigation/native';
+import musicLogo from '../assets/logo.jpg';
 
-const Login1 = () => {
-  const [username, setUsername] = useState('');
+export default function Login() {
+
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [imageUrl, setImageUrl] = useState('');
 
   const navigation = useNavigation();
 
-  function  handleRegister(){
+  function handleRegister() {
     // Handle navigation to the registration page
     navigation.navigate('Register');
     console.log('Navigating to the registration page...');
   };
 
+  /*
+    useEffect(() => {
+      const imageRef = ref(FIREBASE_STORAGE, '/imagens/logo.jpg');
+      getDownloadURL(imageRef)
+        .then((url) => {
+          setImageUrl(url);
+        })
+        .catch((error) => {
+          console.log('Error getting image URL from Firebase Storage:', error);
+        });
+    }, []);*/
 
-  useEffect(() => {
-    const imageRef = ref(FIREBASE_STORAGE, '/imagens/teste.jpg');
-    getDownloadURL(imageRef)
-      .then((url) => {
-        setImageUrl(url);
-      })
-      .catch((error) => {
-        console.log('Error getting image URL from Firebase Storage:', error);
-      });
-  }, []);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^(19|20)\d{6}@isptec.co.ao$/;
+    return emailRegex.test(email);
+
+  };
 
   const handleLogin = async () => {
-    try {
-      const q = query(
-        collection(FIREBASE_DB, 'pessoa'),
-        where('username', '==', username),
-        where('password', '==', password)
-      );
 
-      const querySnapshot = await getDocs(q);
+    if (validateEmail(email)) {
 
-      if (querySnapshot.size > 0) {
-        console.log('Entered');
-        navigation.navigate('VideoListScreen');
-      } else {
-        console.log('The user does not exist');
+      try {
+        const q = query(
+          collection(FIREBASE_DB, 'pessoa'),
+          where('email', '==', email),
+          where('password', '==', password)
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.size > 0) {
+          const registeredPersonId = querySnapshot.docs[0].id;
+          console.log('Entered with ID: ', registeredPersonId);
+          navigation.navigate('Home', { personId: registeredPersonId });
+        } else {
+          console.log('The user does not exist');
+          alert('Conta não existe.');
+
+        }
+      } catch (error) {
+        console.log('Error:', error);
       }
-    } catch (error) {
-      console.log('Error:', error);
+    } else {
+      alert('Formato de e-mail inválido. Por favor introduza um e-mail do formato ISPTEC (Ex: 20230001@isptec.co.ao)');
+
     }
   };
 
- 
-  return (
-    <View style={styles.container}>
-      {imageUrl ? (
+  /* CODE TO ADD IMAGE COMING FROM DATABASE - ADD BELLOW THE CONTAINER VIEW
+  {imageUrl ? (
         <Image source={{ uri: imageUrl }} style={styles.logo} />
       ) : (
         <Text>Loading image...</Text>
       )}
-      <View style={styles.card}>
-        <Text style={styles.title}>ISPMIDIA</Text>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Username</Text>
+  */
+
+
+  return (
+    <>
+      <View style={styles.container}>
+
+        <Image style={styles.logo} source={musicLogo} />
+
+        <View style={styles.inputView}>
           <TextInput
-            style={styles.input}
-            placeholder="Enter your username"
-            placeholderTextColor={'grey'}
-            value={username}
-            onChangeText={setUsername}
+            style={styles.inputText}
+            placeholder="Email"
+            placeholderTextColor="#fff"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
           />
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Password</Text>
+
+        <View style={styles.inputView}>
           <TextInput
-            style={styles.input}
-            placeholder="Enter your password"
-            placeholderTextColor={'grey'}
+            style={styles.inputText}
+            placeholder="Password"
+            placeholderTextColor="#fff"
             secureTextEntry
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => setPassword(text)}
           />
         </View>
-        <TouchableOpacity style={styles.button1} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Sign In</Text>
+
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.loginButtonText}>LOGIN</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Text style={styles.registerText}>
-            Don't have an account?{' '}
-            <Text style={styles.registerLink} onPress={handleRegister}>
-              Register now
-            </Text>
-          </Text>
+
+        <TouchableOpacity onPress={handleRegister}>
+          <Text style={styles.registerText}>Não tem conta? Registar</Text>
         </TouchableOpacity>
       </View>
-    </View>
-  );
-};
+    </>
+  )
+
+
+
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    backgroundColor: 'linear-gradient(23.1% 11.89% at 18.02% 8.11%, #FFFFFF 0.19%, rgba(255, 237, 86, 0.70) 100%)',
   },
   logo: {
-    width: 200,
-    height: 100,
+    width: 300,
+    height: 200,
     marginBottom: 50,
   },
-  card: {
-    width: '80%',
-    backgroundColor: '#FFF7D1',
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000000',
-    marginBottom: 50,
-    shadowOffset: {
-      width: 1,
-      height: 3,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginTop: -30,
-  },
-  title: {
-    fontSize: 20,
+  inputView: {
+    width: 300,
+    backgroundColor: 'pink',
+    borderRadius: 25,
+    height: 50,
     marginBottom: 20,
-    textAlign: 'center',
-    alignContent: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  inputText: {
+    height: 50,
+    color: 'white',
+  },
+  loginButton: {
+    width: 100,
+    backgroundColor: 'pink',
+    borderRadius: 25,
+    height: 50,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
-  inputContainer: {
-    marginBottom: 10,
-  },
-  inputLabel: {
+  loginButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 5,
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderWidth: 1,
-    borderColor: 'black',
-    borderRadius: 0,
-    paddingHorizontal: 10,
-  },
-  button: {
-    width: '100%',
-    marginTop: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#FFF7D1',
-    borderRadius: 0,
-  },
-  button1: {
-    width: '100%',
-    marginTop: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#FFF7D1',
-    borderRadius: 0,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 16,
-    textAlign: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
   },
   registerText: {
-    marginTop: -5,
-  },
-  registerLink: {
-    fontWeight: 'bold',
-    color: 'blue',
+    color: 'pink',
+    fontSize: 16,
+    opacity: 0.7,
   },
 });
-
-export default Login1;

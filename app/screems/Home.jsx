@@ -4,13 +4,12 @@ import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc } fro
 import { FIREBASE_DB } from '../../FirebaseConfig';
 import { Video } from 'expo-av';
 
-export default function VideoListScreen({ route }) {
+export default function Home({ route }) {
 
   const { personId } = route.params;
 
   const [videos, setVideos] = useState([]);
   const [personName, setPersonName] = useState('');
-
 
   useEffect(() => {
     const fetchPersonName = async () => {
@@ -51,7 +50,7 @@ export default function VideoListScreen({ route }) {
   return (
     <View style={{ flex: 1 }}>
 
-
+<Text>HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII</Text>
       <Text>Person ID: {personId}</Text>
       <Text>Person Name: {personName}</Text>
       <FlatList
@@ -59,11 +58,8 @@ export default function VideoListScreen({ route }) {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={{ marginBottom: 16 }}>
-            <Text>Description: {item.description}
-            </Text>
-            <Text>id: {item.id}
-            </Text>
-            <Text>URL: {item.videoURL}</Text>
+            <Text>Description: {item.description}</Text>
+            <Text>id: {item.id}</Text>
             <Video
               source={{ uri: item.videoURL }}
               style={{ width: 300, height: 300 }}
