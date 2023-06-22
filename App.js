@@ -24,19 +24,50 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
-        <Stack.Screen name="UserPage" component={UserPage} options={{headerShown:true}}/>
-        <Stack.Screen name="ImageUploadScreen" component={ImageUploadScreen} options={{headerShown:true}}/>
-        <Stack.Screen name="VideoUpload" component={VideoUploadPage} options={{headerShown:true}}/>
-        <Stack.Screen name="UploadScreen" component={UploadScreen} options={{headerShown:true}}/>
-        <Stack.Screen name="VideoUploadScreen" component={VideoUploadScreen} options={{headerShown:true}}/>
-        <Stack.Screen name="VideoListScreen" component={VideoListScreen} options={{headerShown:true}}/>
-        <Stack.Screen name="AudioUploadScreen" component={AudioUploadScreen} options={{headerShown:true}}/>
-        <Stack.Screen name="AudioListScreen" component={AudioListScreen} options={{headerShown:true}}/>
-        <Stack.Screen name="RadioListScreen" component={RadioListScreen} options={{headerShown:true}}/>
-        <Stack.Screen name="Login" component={Login} options={{headerShown:true}}/>
-        <Stack.Screen name="Register" component={Register} options={{headerShown:true}}/>
-        <Stack.Screen name="Home" component={Home} options={{headerShown:true}}/>
+      <Stack.Navigator initialRouteName='RadioListScreen'>
+        <Stack.Screen name="UserPage" 
+        component={UserPage} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="ImageUploadScreen" 
+        component={ImageUploadScreen} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="VideoUpload" 
+        component={VideoUploadPage} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="UploadScreen" 
+        component={UploadScreen} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="VideoListScreen" 
+        component={VideoListScreen} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="AudioUploadScreen" 
+        component={AudioUploadScreen} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="AudioListScreen" 
+        component={AudioListScreen} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="RadioListScreen" 
+        component={RadioListScreen} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="Login" 
+        component={Login} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="Register" 
+        component={Register} 
+        options={{headerShown:true}}/>
+
+        <Stack.Screen name="Home" 
+        component={Home} 
+        options={{headerShown:true}}/>
 
       </Stack.Navigator>
     </NavigationContainer>

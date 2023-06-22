@@ -1,88 +1,108 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FlatList, Text, View } from 'react-native';
-import { FIREBASE_DB } from '../../FirebaseConfig';
-import { getFirestore, collection, onSnapshot } from 'firebase/firestore';
+import { FlatList, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { collection, getDocs, query, getFirestore } from 'firebase/firestore';
+import { FIREBASE_DB, FIREBASE_STORAGE } from '../../FirebaseConfig';
 import { Audio } from 'expo-av';
 
-const AudioListItem = ({ item }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [soundObject, setSoundObject] = useState(null);
+export default function AudioListScreen () {
+  const [audios, setAudios] = useState([]);
+  const [sound, setSound] = useState(null);
+
+  useEffect(() => {
+    fetchAudios();
+  }, []);
+
+  const fetchAudios = async () => {
+    try {
+      const audiosCollection = collection(getFirestore(), 'audios');
+      const querySnapshot = await getDocs(audiosCollection);
+      const audiosData = querySnapshot.docs.map((doc) => doc.data());
+      setAudios(audiosData);
+    } catch (error) {
+      console.error('Erro ao buscar os áudios:', error);
+    }
+  };
 
   const handlePlayAudio = async (url) => {
     try {
-      if (soundObject === null) {
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: url },
-          { shouldPlay: true }
-        );
-        setSoundObject(sound);
-        setIsPlaying(true);
-      } else {
-        if (isPlaying) {
-          await soundObject.pauseAsync();
-        } else {
-          await soundObject.playAsync();
-        }
-        setIsPlaying(!isPlaying);
+      if (sound) {
+        await sound.unloadAsync();
+        setSound(null);
+        return;
       }
+
+      const { sound: newSound } = await Audio.Sound.createAsync({ uri: url });
+      setSound(newSound);
+      await newSound.playAsync();
     } catch (error) {
       console.error('Erro ao reproduzir o áudio:', error);
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (soundObject) {
-        soundObject.unloadAsync();
+  const AudioItem = ({ item }) => {
+    const handlePress = () => {
+      handlePlayAudio(item.url);
+    };
+
+    const handleThumbnailPress = () => {
+      if (sound && sound.isPlaying) {
+        sound.pauseAsync();
       }
     };
-  }, [soundObject]);
 
-  return (
-    <View style={{ marginBottom: 10 }}>
-      <Text>{item.name}</Text>
-      <Button
-        title={isPlaying ? 'Pausar' : 'Reproduzir'}
-        onPress={() => handlePlayAudio(item.url)}
-      />
-    </View>
+    const handlePlayPause = async () => {
+      if (sound) {
+        if (sound.isPlaying) {
+          await sound.pauseAsync();
+        } else {
+          await sound.playAsync();
+        }
+      }
+    };
+
+    const renderAudioItem = ({ item }) => (
+      <View style={styles.horizontalItem}>
+          <Video
+              source={{ uri: item.url }}
+              style={{ width: 150, height: 150, borderRadius: '10px' }}
+              resizeMode="cover"
+              horizontal
+              useNativeControls
+          />
+          <Text style={styles.horizontalTitle}>{item.description}</Text>
+      </View>
   );
-};
 
-const AudioListScreen = () => {
-  const [audios, setAudios] = useState([]);
-
-  useEffect(() => {
-    const fetchAudios = async () => {
-      try {
-        const audiosCollection = collection(FIREBASE_DB, 'audios');
-        const unsubscribe = onSnapshot(audiosCollection, (snapshot) => {
-          const audioList = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          setAudios(audioList);
-        });
-
-        return () => unsubscribe();
-      } catch (error) {
-        console.error('Erro ao buscar os áudios:', error);
-      }
-    };
-
-    fetchAudios();
-  }, []);
+    return (
+      <View style={{ marginBottom: 16 }}>
+        <TouchableOpacity onPress={handlePress}>
+          <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
+        </TouchableOpacity>
+        <Text>{item.name}</Text>
+      </View>
+    );
+  };
 
   return (
     <View>
-      <Text>Lista de Áudios:</Text>
       <FlatList
         data={audios}
-        renderItem={({ item }) => <AudioListItem item={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.url}
+        renderItem={({ item }) => <AudioItem item={item} />}
+        horizontal
+        showsHorizontalScrollIndicator={true}
+
       />
     </View>
   );
 };
 
-export default AudioListScreen;
+const styles = StyleSheet.create({
+  item: {
+    width: 150,
+    height: 150,
+    padding: 10,
+    margin: 10,
+  },
+
+});

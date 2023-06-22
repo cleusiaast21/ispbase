@@ -54,7 +54,7 @@ const ImageUploadScreen = () => {
       // Generate a unique filename using a timestamp
       const filename = `${Date.now()}.jpg`;
 
-      const storageRef = ref(FIREBASE_STORAGE, filename);
+      const storageRef = ref(FIREBASE_STORAGE, `images/${filename}`);
       const uploadTask = uploadBytes(storageRef, blob);
 
       await uploadTask;

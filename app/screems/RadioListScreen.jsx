@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button, StyleSheet, Image } from 'react-native';
 import { FIREBASE_DB } from '../../FirebaseConfig';
 import { getFirestore, collection, onSnapshot } from 'firebase/firestore';
 import { Audio } from 'expo-av';
@@ -72,6 +72,7 @@ const RadioListScreen = () => {
       <Text>Lista de Rádios:</Text>
       {radios.map((radio) => (
         <View key={radio.id}>
+          <Image source={{ uri: radio.thumbnailURL }} style={styles.item} />
           <Text>Nome: {radio.name}</Text>
           <Text>Frequência: {radio.frequency}</Text>
           <Button
@@ -84,5 +85,16 @@ const RadioListScreen = () => {
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+  item: {
+    width: 100,
+    height: 100,
+    padding: 10,
+    margin: 10,
+  },
+
+});
 
 export default RadioListScreen;

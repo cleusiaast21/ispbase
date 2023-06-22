@@ -5,6 +5,7 @@ import { FIREBASE_DB } from '../../FirebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import musicLogo from '../assets/logo.jpg';
 
+
 export default function Register() {
 
   const [email, setEmail] = useState('');
@@ -20,9 +21,9 @@ export default function Register() {
 
   const navigation = useNavigation();
 
-  function handleLogin(){
+  function handleLogin() {
     navigation.navigate("Login");
-}
+  }
 
   const handleRegister = async () => {
 
