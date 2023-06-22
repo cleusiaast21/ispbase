@@ -4,7 +4,7 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { FIREBASE_STORAGE, FIREBASE_DB } from '../../FirebaseConfig';
 import { useNavigation } from '@react-navigation/native';
-import musicLogo from '../assets/logo.jpg';
+import logo from '../assets/logo.jpg';
 
 export default function Login() {
 
@@ -20,17 +20,17 @@ export default function Login() {
     console.log('Navigating to the registration page...');
   };
 
-  /*
-    useEffect(() => {
-      const imageRef = ref(FIREBASE_STORAGE, '/imagens/logo.jpg');
-      getDownloadURL(imageRef)
-        .then((url) => {
-          setImageUrl(url);
-        })
-        .catch((error) => {
-          console.log('Error getting image URL from Firebase Storage:', error);
-        });
-    }, []);*/
+
+  useEffect(() => {
+    const imageRef = ref(FIREBASE_STORAGE, '/images/logo.jpg');
+    getDownloadURL(imageRef)
+      .then((url) => {
+        setImageUrl(url);
+      })
+      .catch((error) => {
+        console.log('Error getting image URL from Firebase Storage:', error);
+      });
+  }, []);
 
 
   const validateEmail = (email) => {
@@ -70,20 +70,16 @@ export default function Login() {
     }
   };
 
-  /* CODE TO ADD IMAGE COMING FROM DATABASE - ADD BELLOW THE CONTAINER VIEW
-  {imageUrl ? (
-        <Image source={{ uri: imageUrl }} style={styles.logo} />
-      ) : (
-        <Text>Loading image...</Text>
-      )}
-  */
+  
+  
 
 
   return (
     <>
       <View style={styles.container}>
 
-        <Image style={styles.logo} source={musicLogo} />
+      <Image source={logo} style={styles.logo} />
+
 
         <View style={styles.inputView}>
           <TextInput

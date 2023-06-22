@@ -91,7 +91,6 @@ export default function AudioListScreen () {
         renderItem={({ item }) => <AudioItem item={item} />}
         horizontal
         showsHorizontalScrollIndicator={true}
-
       />
     </View>
   );

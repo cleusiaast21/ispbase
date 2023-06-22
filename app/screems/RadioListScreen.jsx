@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Button, StyleSheet, Image } from 'react-native';
+import { Text, View, Button, StyleSheet, Image, FlatList } from 'react-native';
 import { FIREBASE_DB } from '../../FirebaseConfig';
 import { getFirestore, collection, onSnapshot } from 'firebase/firestore';
 import { Audio } from 'expo-av';
@@ -17,7 +17,7 @@ const RadioListScreen = () => {
             ...doc.data(),
             isPlaying: false,
             soundObject: null,
-            isLoading: false
+            isLoading: false,
           }));
           setRadios(radioList);
         });
@@ -69,23 +69,27 @@ const RadioListScreen = () => {
 
   return (
     <View>
-      <Text>Lista de Rádios:</Text>
-      {radios.map((radio) => (
-        <View key={radio.id}>
-          <Image source={{ uri: radio.thumbnailURL }} style={styles.item} />
-          <Text>Nome: {radio.name}</Text>
-          <Text>Frequência: {radio.frequency}</Text>
-          <Button
-            title={radio.isLoading ? 'Carregando' : (radio.isPlaying ? 'Pausar' : 'Reproduzir')}
-            disabled={radio.isLoading}
-            onPress={() => handlePlayRadio(radio)}
-          />
-        </View>
-      ))}
+
+      <FlatList
+        data={radios}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View key={item.id}>
+            <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
+            <Text>{item.name}</Text>
+            <Button style={styles.button}
+              title={item.isLoading ? 'Carregando' : item.isPlaying ? 'Pause' : 'Play'}
+              disabled={item.isLoading}
+              onPress={() => handlePlayRadio(item)}
+            />
+          </View>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={true}
+      />
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   item: {
@@ -94,7 +98,9 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
-
+  button: {
+    alignSelf: 'center',
+  }
 });
 
 export default RadioListScreen;

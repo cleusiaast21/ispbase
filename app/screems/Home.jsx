@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../FirebaseConfig';
-import { Video } from 'expo-av';
 import profileImage from '../assets/logo.jpg';
 import AudioListScreen from './AudioListScreen';
-import { ScrollView } from 'react-native-gesture-handler';
-
-
-
+import RadioListScreen from './RadioListScreen.jsx';
+import VideoListScreen from './VideoListScreen.jsx';
 
 export default function Home({ route }) {
 
     const { personId } = route.params;
-
-    const [videos, setVideos] = useState([]);
     const [personName, setPersonName] = useState('');
+    const [profileImageUrl, setProfileImageUrl] = useState('');
+
 
     useEffect(() => {
         const fetchPersonName = async () => {
@@ -26,6 +23,7 @@ export default function Home({ route }) {
                 if (docSnapshot.exists()) {
                     const data = docSnapshot.data();
                     setPersonName(data.name);
+                    setProfileImageUrl(data.imageUrl);
                 }
             } catch (error) {
                 console.log('Error fetching person name:', error);
@@ -35,64 +33,23 @@ export default function Home({ route }) {
         fetchPersonName();
     }, [personId]);
 
-    useEffect(() => {
-        subscribeToVideos();
-    }, []);
-
-    const subscribeToVideos = () => {
-        const videosCollection = collection(FIREBASE_DB, 'videos');
-        const videosQuery = query(videosCollection, orderBy('createdAt', 'desc'));
-
-        onSnapshot(videosQuery, (snapshot) => {
-            const videosData = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setVideos(videosData);
-        });
-    };
-
-    const renderHorizontalItem = ({ item }) => (
-        <View style={styles.horizontalItem}>
-            <Video
-                source={{ uri: item.url }}
-                style={{ width: 300, height: 200, borderRadius: 10 }}
-                resizeMode="cover"
-                horizontal
-                useNativeControls
-            />
-            <Text style={styles.horizontalTitle}>{item.description}</Text>
-        </View>
-    );
-
-
-
 
     return (
         <ScrollView style={{ flex: 1 }}>
 
             <View style={styles.header}>
                 <Text style={styles.label}>Olá, {personName}!</Text>
-
-                <Image source={profileImage} style={styles.profileImage} />
-
+                <Image source={{uri:profileImageUrl}} style={styles.profileImage} />
             </View>
 
             <Text style={styles.sectionTitle}>Videos</Text>
-
-            <FlatList style={styles.scrollContainer}
-                data={videos}
-                keyExtractor={(item) => item.id}
-                renderItem={(renderHorizontalItem)}
-                horizontal
-                showsHorizontalScrollIndicator={true}
-
-            />
+            <VideoListScreen/>
 
             <Text style={styles.sectionTitle}>Áudios</Text>
             <AudioListScreen/>
 
-
+            <Text style={styles.sectionTitle}>Estações de Rádio</Text>
+            <RadioListScreen />
 
         </ScrollView>
     );

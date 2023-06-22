@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
-import { FIREBASE_DB } from '../../FirebaseConfig';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { FIREBASE_STORAGE, FIREBASE_DB } from '../../FirebaseConfig';
 import { useNavigation } from '@react-navigation/native';
-import musicLogo from '../assets/logo.jpg';
-
+import logo from '../assets/logo.jpg'
 
 export default function Register() {
 
@@ -12,6 +12,8 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+
 
   const validateEmail = (email) => {
     const emailRegex = /^(19|20)\d{6}@isptec.co.ao$/;
@@ -45,12 +47,16 @@ export default function Register() {
           return;
         }
 
+        const defaultImageRef = ref(FIREBASE_STORAGE, '/images/avatar.png');
+      const defaultImageUrl = await getDownloadURL(defaultImageRef);
+
         // Cria um novo documento na coleção 'pessoa' com os dados fornecidos
         const docRef = await addDoc(collection(FIREBASE_DB, 'pessoa'), {
           name,
           surname,
           password,
           email,
+          imageUrl: defaultImageUrl,
         });
         console.log('Nova pessoa criada com ID:', docRef.id);
         navigation.navigate('Login');
@@ -71,8 +77,8 @@ export default function Register() {
 
         <ScrollView>
 
-          <Image style={styles.logo} source={musicLogo} />
-
+            <Image source={logo} style={styles.logo} />
+          
 
           <View style={styles.inputView}>
             <TextInput
