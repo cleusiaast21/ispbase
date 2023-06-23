@@ -6,6 +6,7 @@ import profileImage from '../assets/logo.jpg';
 import AudioListScreen from './AudioListScreen';
 import RadioListScreen from './RadioListScreen.jsx';
 import VideoListScreen from './VideoListScreen.jsx';
+import BottomNav from '../components/BottomNav';
 
 export default function Home({ route }) {
 
@@ -35,23 +36,29 @@ export default function Home({ route }) {
 
 
     return (
-        <ScrollView style={{ flex: 1 }}>
 
-            <View style={styles.header}>
-                <Text style={styles.label}>Olá, {personName}!</Text>
-                <Image source={{uri:profileImageUrl}} style={styles.profileImage} />
-            </View>
+        <>
+            <ScrollView style={{ flex: 1 }}>
 
-            <Text style={styles.sectionTitle}>Videos</Text>
-            <VideoListScreen/>
+                <View style={styles.header}>
+                    <Text style={styles.label}>Olá, {personName}!</Text>
+                    <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
+                </View>
 
-            <Text style={styles.sectionTitle}>Áudios</Text>
-            <AudioListScreen/>
+                <Text style={styles.sectionTitle}>Videos</Text>
+                <VideoListScreen />
 
-            <Text style={styles.sectionTitle}>Estações de Rádio</Text>
-            <RadioListScreen />
+                <Text style={styles.sectionTitle}>Áudios</Text>
+                <AudioListScreen />
 
-        </ScrollView>
+                <Text style={styles.sectionTitle}>Estações de Rádio</Text>
+                <RadioListScreen />
+
+            </ScrollView>
+
+            <BottomNav></BottomNav>
+        </>
+
     );
 };
 

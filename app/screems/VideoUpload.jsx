@@ -176,8 +176,8 @@ const VideoUploadScreen = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
-      
-      
+
+
       <TouchableOpacity onPress={pickVideo} style={{ marginBottom: 16 }}>
         <Text>Select Video</Text>
       </TouchableOpacity>
@@ -198,11 +198,11 @@ const VideoUploadScreen = () => {
         <Text>Select Thumbnail</Text>
       </TouchableOpacity>
 
-      
-<TouchableOpacity onPress={handleUploadPress}>
+
+      <TouchableOpacity onPress={handleUploadPress}>
         <Text>Upload Video</Text>
       </TouchableOpacity>
-      
+
       {thumbnailUri && (
         <View style={{ marginBottom: 16 }}>
           <Text>Selected Thumbnail:</Text>

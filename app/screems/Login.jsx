@@ -55,7 +55,7 @@ export default function Login() {
         if (querySnapshot.size > 0) {
           const registeredPersonId = querySnapshot.docs[0].id;
           console.log('Entered with ID: ', registeredPersonId);
-          navigation.navigate('Home', { personId: registeredPersonId });
+          navigation.navigate('ProfilePage', { personId: registeredPersonId });
         } else {
           console.log('The user does not exist');
           alert('Conta não existe.');
@@ -70,16 +70,12 @@ export default function Login() {
     }
   };
 
-  
-  
-
 
   return (
     <>
       <View style={styles.container}>
 
       <Image source={logo} style={styles.logo} />
-
 
         <View style={styles.inputView}>
           <TextInput
@@ -109,11 +105,10 @@ export default function Login() {
         <TouchableOpacity onPress={handleRegister}>
           <Text style={styles.registerText}>Não tem conta? Registar</Text>
         </TouchableOpacity>
+
       </View>
     </>
   )
-
-
 
 }
 

@@ -48,7 +48,7 @@ export default function Register() {
         }
 
         const defaultImageRef = ref(FIREBASE_STORAGE, '/images/avatar.png');
-      const defaultImageUrl = await getDownloadURL(defaultImageRef);
+        const defaultImageUrl = await getDownloadURL(defaultImageRef);
 
         // Cria um novo documento na coleção 'pessoa' com os dados fornecidos
         const docRef = await addDoc(collection(FIREBASE_DB, 'pessoa'), {
@@ -77,8 +77,8 @@ export default function Register() {
 
         <ScrollView>
 
-            <Image source={logo} style={styles.logo} />
-          
+          <Image source={logo} style={styles.logo} />
+
 
           <View style={styles.inputView}>
             <TextInput
