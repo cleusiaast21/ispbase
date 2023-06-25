@@ -3,9 +3,7 @@ import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ScrollView }
 import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../FirebaseConfig';
 import profileImage from '../assets/logo.jpg';
-import AudioListScreen from './AudioListScreen';
-import RadioListScreen from './RadioListScreen.jsx';
-import VideoListScreen from './VideoListScreen.jsx';
+import AudioListScreen from './AudioListScreen.jsx';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -38,17 +36,17 @@ export default function Home({ route }) {
         fetchPersonName();
     }, [personId]);
 
+    function goHome() {
+        const registeredPersonId = personId;
+        navigation.navigate('Home', { personId: registeredPersonId });
+    }
+
     function goToRadio() {
         const registeredPersonId = personId;
         navigation.navigate('Radio', { personId: registeredPersonId });
     }
 
     function goToVideos() {
-        const registeredPersonId = personId;
-        navigation.navigate('Videos', { personId: registeredPersonId });
-    }
-
-    function goToSongs() {
         const registeredPersonId = personId;
         navigation.navigate('Videos', { personId: registeredPersonId });
     }
@@ -65,33 +63,28 @@ export default function Home({ route }) {
             <ScrollView style={styles.container}>
 
                 <View style={styles.header}>
-                    <Text style={styles.label}>Olá, {personName}!</Text>
-
+                    <Text style={styles.label}>Músicas</Text>
                     <TouchableOpacity onPress={goToProfilePage}>
                         <Image
                             style={styles.profileImage}
                             source={profileImageUrl ? { uri: profileImageUrl } : require('../assets/loading.jpg')}
                         />
                     </TouchableOpacity>
-
                 </View>
 
-                <Text style={styles.sectionTitle}>Videos</Text>
-                <VideoListScreen />
-
-                <Text style={styles.sectionTitle}>Áudios</Text>
+                <Text style={styles.sectionTitle}>Músicas Favoritas</Text>
                 <AudioListScreen />
 
-                <Text style={styles.sectionTitle}>Estações de Rádio</Text>
-                <RadioListScreen />
+                <Text style={styles.sectionTitle}>Músicas</Text>
+                <AudioListScreen />
 
             </ScrollView>
 
             <View style={styles.bottomNavMargin}>
 
                 <View style={styles.bottomNav}>
-                    <TouchableOpacity >
-                        <Ionicons style={styles.homeIcon} name="home-outline" size={30} color="purple" />
+                    <TouchableOpacity onPress={goHome}>
+                        <Ionicons name="home-outline" size={30} color="pink" />
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={goToVideos}>
@@ -104,8 +97,8 @@ export default function Home({ route }) {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={goToSongs}>
-                        <Ionicons name="musical-notes-outline" size={30} color="pink" />
+                    <TouchableOpacity >
+                        <Ionicons name="musical-notes-outline" size={30} color="purple" />
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={goToRadio}>

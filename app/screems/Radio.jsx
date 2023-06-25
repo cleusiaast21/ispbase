@@ -38,9 +38,9 @@ export default function Home({ route }) {
         fetchPersonName();
     }, [personId]);
 
-    function goToRadio() {
+    function goHome() {
         const registeredPersonId = personId;
-        navigation.navigate('Radio', { personId: registeredPersonId });
+        navigation.navigate('Home', { personId: registeredPersonId });
     }
 
     function goToVideos() {
@@ -50,7 +50,7 @@ export default function Home({ route }) {
 
     function goToSongs() {
         const registeredPersonId = personId;
-        navigation.navigate('Videos', { personId: registeredPersonId });
+        navigation.navigate('Songs', { personId: registeredPersonId });
     }
 
     function goToProfilePage() {
@@ -65,22 +65,17 @@ export default function Home({ route }) {
             <ScrollView style={styles.container}>
 
                 <View style={styles.header}>
-                    <Text style={styles.label}>Olá, {personName}!</Text>
-
+                    <Text style={styles.label}>Rádio</Text>
                     <TouchableOpacity onPress={goToProfilePage}>
                         <Image
                             style={styles.profileImage}
                             source={profileImageUrl ? { uri: profileImageUrl } : require('../assets/loading.jpg')}
                         />
                     </TouchableOpacity>
-
                 </View>
 
-                <Text style={styles.sectionTitle}>Videos</Text>
-                <VideoListScreen />
-
-                <Text style={styles.sectionTitle}>Áudios</Text>
-                <AudioListScreen />
+                <Text style={styles.sectionTitle}>Estações de Rádio Favoritas</Text>
+                <RadioListScreen />
 
                 <Text style={styles.sectionTitle}>Estações de Rádio</Text>
                 <RadioListScreen />
@@ -90,8 +85,8 @@ export default function Home({ route }) {
             <View style={styles.bottomNavMargin}>
 
                 <View style={styles.bottomNav}>
-                    <TouchableOpacity >
-                        <Ionicons style={styles.homeIcon} name="home-outline" size={30} color="purple" />
+                    <TouchableOpacity onPress={goHome}>
+                        <Ionicons name="home-outline" size={30} color="pink" />
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={goToVideos}>
@@ -108,8 +103,8 @@ export default function Home({ route }) {
                         <Ionicons name="musical-notes-outline" size={30} color="pink" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={goToRadio}>
-                        <Ionicons name="radio-outline" size={30} color="pink" />
+                    <TouchableOpacity >
+                        <Ionicons name="radio-outline" size={30} color="purple" />
                     </TouchableOpacity>
                 </View>
 

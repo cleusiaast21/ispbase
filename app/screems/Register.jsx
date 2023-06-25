@@ -12,7 +12,6 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
 
 
   const validateEmail = (email) => {
@@ -93,7 +92,7 @@ export default function Register() {
           <View style={styles.inputView}>
             <TextInput
               style={styles.inputText}
-              placeholder="Surname"
+              placeholder="Sobrenome"
               placeholderTextColor="#fff"
               value={surname}
               onChangeText={(text) => setSurname(text)}
@@ -120,7 +119,7 @@ export default function Register() {
             />
           </View>
           <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-            <Text style={styles.registerButtonText}>REGISTER</Text>
+            <Text style={styles.registerButtonText}>REGISTAR</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleLogin}>

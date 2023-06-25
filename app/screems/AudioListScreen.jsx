@@ -74,11 +74,11 @@ export default function AudioListScreen () {
   );
 
     return (
-      <View style={{ marginBottom: 16 }}>
+      <View style={{ marginBottom: 20 }}>
         <TouchableOpacity onPress={handlePress}>
           <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
         </TouchableOpacity>
-        <Text>{item.name}</Text>
+        <Text>{item.title}</Text>
       </View>
     );
   };

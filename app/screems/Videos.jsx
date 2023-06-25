@@ -3,8 +3,6 @@ import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ScrollView }
 import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../FirebaseConfig';
 import profileImage from '../assets/logo.jpg';
-import AudioListScreen from './AudioListScreen';
-import RadioListScreen from './RadioListScreen.jsx';
 import VideoListScreen from './VideoListScreen.jsx';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -38,19 +36,19 @@ export default function Home({ route }) {
         fetchPersonName();
     }, [personId]);
 
+    function goHome() {
+        const registeredPersonId = personId;
+        navigation.navigate('Home', { personId: registeredPersonId });
+    }
+
     function goToRadio() {
         const registeredPersonId = personId;
         navigation.navigate('Radio', { personId: registeredPersonId });
     }
 
-    function goToVideos() {
-        const registeredPersonId = personId;
-        navigation.navigate('Videos', { personId: registeredPersonId });
-    }
-
     function goToSongs() {
         const registeredPersonId = personId;
-        navigation.navigate('Videos', { personId: registeredPersonId });
+        navigation.navigate('Songs', { personId: registeredPersonId });
     }
 
     function goToProfilePage() {
@@ -58,44 +56,38 @@ export default function Home({ route }) {
         navigation.navigate('ProfilePage', { personId: registeredPersonId });
     }
 
-
     return (
 
         <>
             <ScrollView style={styles.container}>
 
                 <View style={styles.header}>
-                    <Text style={styles.label}>Olá, {personName}!</Text>
-
+                    <Text style={styles.label}>Vídeos</Text>
                     <TouchableOpacity onPress={goToProfilePage}>
                         <Image
                             style={styles.profileImage}
                             source={profileImageUrl ? { uri: profileImageUrl } : require('../assets/loading.jpg')}
                         />
                     </TouchableOpacity>
-
                 </View>
 
-                <Text style={styles.sectionTitle}>Videos</Text>
+                <Text style={styles.sectionTitle}>Vídeos Favoritos</Text>
                 <VideoListScreen />
 
-                <Text style={styles.sectionTitle}>Áudios</Text>
-                <AudioListScreen />
-
-                <Text style={styles.sectionTitle}>Estações de Rádio</Text>
-                <RadioListScreen />
+                <Text style={styles.sectionTitle}>Vídeos</Text>
+                <VideoListScreen />
 
             </ScrollView>
 
             <View style={styles.bottomNavMargin}>
 
                 <View style={styles.bottomNav}>
-                    <TouchableOpacity >
-                        <Ionicons style={styles.homeIcon} name="home-outline" size={30} color="purple" />
+                    <TouchableOpacity onPress={goHome}>
+                        <Ionicons name="home-outline" size={30} color="pink" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={goToVideos}>
-                        <Ionicons name="film-outline" size={30} color="pink" />
+                    <TouchableOpacity>
+                        <Ionicons name="film-outline" size={30} color="purple" />
                     </TouchableOpacity>
 
                     <TouchableOpacity>
@@ -119,7 +111,6 @@ export default function Home({ route }) {
 
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {

@@ -1,37 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { FIREBASE_STORAGE, FIREBASE_DB } from '../../FirebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import logo from '../assets/logo.jpg';
+import backgroundImg from '../assets/image2.jpg';
 
 export default function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
 
   const navigation = useNavigation();
 
   function handleRegister() {
-    // Handle navigation to the registration page
     navigation.navigate('Register');
-    console.log('Navigating to the registration page...');
   };
-
-
-  useEffect(() => {
-    const imageRef = ref(FIREBASE_STORAGE, '/images/logo.jpg');
-    getDownloadURL(imageRef)
-      .then((url) => {
-        setImageUrl(url);
-      })
-      .catch((error) => {
-        console.log('Error getting image URL from Firebase Storage:', error);
-      });
-  }, []);
-
 
   const validateEmail = (email) => {
     const emailRegex = /^(19|20)\d{6}@isptec.co.ao$/;
@@ -55,7 +40,7 @@ export default function Login() {
         if (querySnapshot.size > 0) {
           const registeredPersonId = querySnapshot.docs[0].id;
           console.log('Entered with ID: ', registeredPersonId);
-          navigation.navigate('ProfilePage', { personId: registeredPersonId });
+          navigation.navigate('Home', { personId: registeredPersonId });
         } else {
           console.log('The user does not exist');
           alert('Conta não existe.');
@@ -72,7 +57,8 @@ export default function Login() {
 
 
   return (
-    <>
+    <ImageBackground source={backgroundImg} style={styles.backgroundImage}>
+
       <View style={styles.container}>
 
       <Image source={logo} style={styles.logo} />
@@ -107,7 +93,7 @@ export default function Login() {
         </TouchableOpacity>
 
       </View>
-    </>
+    </ImageBackground>
   )
 
 }
@@ -118,6 +104,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // or 'stretch' if you want to stretch the image
   },
   logo: {
     width: 300,

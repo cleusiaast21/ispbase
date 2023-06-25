@@ -4,20 +4,22 @@ import { createStackNavigator } from '@react-navigation/stack';
 import VideoUploadPage from './app/screems/VideoUpload';
 import UploadScreen from './app/screems/UploadScreen';
 import ImageUploadScreen from './app/screems/ImageUploadScreen';
-import VideoUploadScreen from './app/screems/VideoUploadScreen';
-import VideoListScreen from './app/screems/VideoListScreen';
 import AudioUploadScreen from './app/screems/AudioUploadScreen';
-import AudioListScreen from './app/screems/AudioListScreen';
-import RadioListScreen from './app/screems/RadioListScreen';
 import Login from './app/screems/Login';
 import Register from './app/screems/Register';
 import Home from './app/screems/Home';
 import ProfilePage from './app/screems/ProfilePage';
+import Radio from './app/screems/Radio';
+import Videos from './app/screems/Videos';
+import Songs from './app/screems/Songs';
+
+
 
 
 // Importe os componentes de tela que você deseja navegar
 
 const Stack = createStackNavigator();
+
 
 const App = () => {
   return (
@@ -46,7 +48,15 @@ const App = () => {
 
         <Stack.Screen name="Login"
           component={Login}
-          options={{ headerShown: true }} />
+          options={{ headerShown: false }} />
+
+        <Stack.Screen name="Radio"
+          component={Radio}
+          options={{ headerShown: false }} />
+
+        <Stack.Screen name="Videos"
+          component={Videos}
+          options={{ headerShown: false }} />
 
         <Stack.Screen name="Register"
           component={Register}
@@ -54,7 +64,11 @@ const App = () => {
 
         <Stack.Screen name="Home"
           component={Home}
-          options={{ headerShown: true }} />
+          options={{ headerShown: false }} />
+
+        <Stack.Screen name="Songs"
+          component={Songs}
+          options={{ headerShown: false }} />
 
       </Stack.Navigator>
     </NavigationContainer>
