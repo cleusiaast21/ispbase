@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { collection, getDocs, query, getFirestore } from 'firebase/firestore';
 import { FIREBASE_DB, FIREBASE_STORAGE } from '../../FirebaseConfig';
-import { Audio } from 'expo-av';
+import { useNavigation } from '@react-navigation/native';
 
 export default function AudioListScreen() {
   const [audios, setAudios] = useState([]);
-  const [sound, setSound] = useState(null);
+
+  const navigation = useNavigation();
+
 
   useEffect(() => {
     fetchAudios();
@@ -23,74 +25,24 @@ export default function AudioListScreen() {
     }
   };
 
-  const handlePlayAudio = async (url) => {
-    try {
-      if (sound) {
-        await sound.unloadAsync();
-        setSound(null);
-        return;
-      }
-
-      const { sound: newSound } = await Audio.Sound.createAsync({ uri: url });
-      setSound(newSound);
-      await newSound.playAsync();
-    } catch (error) {
-      console.error('Erro ao reproduzir o áudio:', error);
-    }
-  };
-
-  const AudioItem = ({ item }) => {
-    const handlePress = () => {
-      handlePlayAudio(item.url);
-    };
-
-    const handleThumbnailPress = () => {
-      if (sound && sound.isPlaying) {
-        sound.pauseAsync();
-      }
-    };
-
-    const handlePlayPause = async () => {
-      if (sound) {
-        if (sound.isPlaying) {
-          await sound.pauseAsync();
-        } else {
-          await sound.playAsync();
-        }
-      }
-    };
-/*
-    const renderAudioItem = ({ item }) => (
-      <View style={styles.horizontalItem}>
-        <Video
-          source={{ uri: item.url }}
-          style={{ width: 150, height: 150, borderRadius: '10px' }}
-          resizeMode="cover"
-          horizontal
-          useNativeControls
-        />
-
-
-      </View>
-    );*/
-
-    return (
-      <View style={{ marginBottom: 20 }}>
-        <TouchableOpacity onPress={handlePress}>
-          <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
-        </TouchableOpacity>
-        <Text style={styles.horizontalTitle}>{item.title}</Text>
-        <Text style={styles.horizontalArtist}>{item.artistName}</Text>
-      </View>
-    );
-  };
+  function goToMusicPage({item}){
+    console.log(item.url)
+    navigation.navigate('MusicPage',{item});
+  }
 
   return (
     <View>
       <FlatList
         data={audios}
-        keyExtractor={(item) => item.url}
-        renderItem={({ item }) => <AudioItem item={item} />}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item }) => (
+          <View style={{ marginBottom: 20 }}>
+          <TouchableOpacity >
+            <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
+          </TouchableOpacity>
+          <Text style={styles.horizontalTitle}>{item.title}</Text>
+          <Text style={styles.horizontalArtist}>{item.artistName}</Text>
+        </View>)}
         horizontal
         showsHorizontalScrollIndicator={true}
       />
@@ -110,11 +62,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'pink',
+    marginLeft: 5,
 
   },
   horizontalArtist: {
     fontSize: 14,
     color: 'pink',
+    marginLeft: 5,
+
   },
 
 });

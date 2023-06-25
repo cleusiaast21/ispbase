@@ -11,7 +11,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 
-
 export default function Home({ route }) {
 
     const { personId } = route.params;
@@ -62,11 +61,6 @@ export default function Home({ route }) {
         navigation.navigate('ProfilePage', { personId: registeredPersonId });
     }
 
-    function goToMusicPage() {
-        navigation.navigate('MusicPage',{audio});
-    }
-
-
     return (
 
         <>
@@ -109,7 +103,7 @@ export default function Home({ route }) {
                         <Ionicons name="film-outline" size={30} color="pink" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={goToMusicPage}>
+                    <TouchableOpacity>
                         <View style={styles.circleContainer} >
                             <Image source={profileImage} style={styles.circleImage} />
                         </View>
@@ -136,6 +130,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        marginBottom: 70,
     },
     header: {
         flexDirection: 'row',
@@ -218,9 +213,6 @@ const styles = StyleSheet.create({
     circleImage: {
         width: '100%',
         height: '100%',
-    },
-    bottomNavMargin: {
-        paddingTop: 70,
     },
 });
 

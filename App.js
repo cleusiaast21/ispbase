@@ -20,7 +20,7 @@ const App = () => {
 
         <Stack.Screen name="ProfilePage"
           component={ProfilePage}
-          options={{ headerShown: true }} />
+          options={{ headerShown: false }} />
 
         <Stack.Screen name="Login"
           component={Login}
@@ -46,7 +46,7 @@ const App = () => {
           component={Songs}
           options={{ headerShown: false }} />
 
-<Stack.Screen name="MusicPage"
+        <Stack.Screen name="MusicPage"
           component={MusicPage}
           options={{ headerShown: true }} />
 

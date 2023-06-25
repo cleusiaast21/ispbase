@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, ImageBackground } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, ImageBackground, Alert } from 'react-native';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { FIREBASE_STORAGE, FIREBASE_DB } from '../../FirebaseConfig';
@@ -42,12 +42,12 @@ export default function Login() {
           console.log('Entered with ID: ', registeredPersonId);
           navigation.navigate('Home', { personId: registeredPersonId });
         } else {
-          console.log('The user does not exist');
-          alert('Conta não existe.');
-
+          Alert.alert('Falha na internet','Verifique a sua conexão a internet');
         }
       } catch (error) {
         console.log('Error:', error);
+        Alert.alert('Erro:', error);
+
       }
     } else {
       alert('Formato de e-mail inválido. Por favor introduza um e-mail do formato ISPTEC (Ex: 20230001@isptec.co.ao)');

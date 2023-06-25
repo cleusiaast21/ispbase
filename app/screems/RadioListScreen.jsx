@@ -70,7 +70,7 @@ const RadioListScreen = () => {
   return (
     <View>
 
-      <FlatList
+      <FlatList 
         data={radios}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -99,7 +99,9 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   button: {
-    alignSelf: 'center',
+    marginBottom: 700,
+    color:  'pink',
+
   }
 });
 

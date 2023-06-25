@@ -7,6 +7,7 @@ import { FIREBASE_DB, FIREBASE_STORAGE } from '../../FirebaseConfig';
 import * as DocumentPicker from 'expo-document-picker';
 import { useNavigation } from '@react-navigation/native';
 import { v4 as uuidv4 } from 'uuid';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -281,10 +282,14 @@ export default function Profile({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+
+      <View style={{ position: 'fixed', top: 0, right: 0, marginBottom: 10 }}>
+        <Ionicons onPress={logout} name="log-out-outline" size={30} color="red"  />
+       </View> 
         <TouchableOpacity onPress={handleChangeProfilePicture}>
           <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
         </TouchableOpacity>
-        <Text style={styles.label}>Olá, {personName}</Text>
+        <Text style={styles.label}>{personName} {personSurname}</Text>
       </View>
 
       <View style={styles.options}>
@@ -298,16 +303,21 @@ export default function Profile({ route }) {
       </View>
       {showForm && (
         <View style={styles.formContainer}>
+
+          <Text style={styles.info}>Forneça as informacões do mídia: </Text>
+
           <TextInput
             style={styles.input}
-            placeholder="Title"
+            placeholder="Título"
             value={title}
+            placeholderTextColor={'white'}
             onChangeText={setTitle}
           />
 
           <TextInput
             style={styles.input}
-            placeholder="Description"
+            placeholder="Descrição"
+            placeholderTextColor={'white'}
             value={description}
             onChangeText={setDescription}
           />
@@ -316,7 +326,7 @@ export default function Profile({ route }) {
             {thumbnailUri ? (
               <Text style={{ color: 'green' }}>Thumbnail selecionada</Text>
             ) : (
-              <Text style={styles.thumbnailButtonText}>Select Thumbnail</Text>
+              <Text style={styles.thumbnailButtonText}>Selecionar Thumbnail</Text>
             )}
           </TouchableOpacity>
 
@@ -324,7 +334,7 @@ export default function Profile({ route }) {
             {itemUri ? (
               <Text style={styles.itemButtonText}>{itemType === 'audio' ? <Text style={{ color: 'green' }}>Audio selecionado</Text> : <Text style={{ color: 'green' }}>Video selecionado</Text>}</Text>
             ) : (
-              <Text style={styles.itemButtonText}>Select Item</Text>
+              <Text style={styles.itemButtonText}>Selecionar Item</Text>
             )}
           </TouchableOpacity>
 
@@ -335,10 +345,6 @@ export default function Profile({ route }) {
         </View>
       )}
 
-
-      <TouchableOpacity onPress={logout}>
-        <Text style={styles.uploadButtonText}>logout</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -348,6 +354,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   options: {
     flexDirection: 'row',
@@ -366,14 +373,19 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  info: {
+    fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 10,
+    color: 'grey',
   },
   button: {
     backgroundColor: 'pink',
     borderRadius: 25,
     padding: 10,
-    marginBottom: 10,
-    margin: 10,
+    margin: 5,
   },
   buttonText: {
     color: 'white',
@@ -385,22 +397,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    width: '80%',
-    height: 40,
+    width: 200,
+    height: 35,
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 5,
     marginBottom: 10,
     paddingLeft: 10,
+    backgroundColor: 'pink',
+
   },
   thumbnailButton: {
-    backgroundColor: 'lightgray',
-    width: '80%',
-    height: 40,
+    backgroundColor: 'pink',
+    width: 200,
+    height: 35,
     borderRadius: 5,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
+
+    borderWidth: 1,
+    borderColor: 'gray',
   },
   thumbnailImage: {
     width: '100%',
@@ -409,19 +426,22 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   thumbnailButtonText: {
-    color: 'gray',
+    color: 'white',
   },
   itemButton: {
-    backgroundColor: 'lightgray',
-    width: '80%',
-    height: 40,
+    backgroundColor: 'pink',
+    width: 200,
+    height: 35,
     borderRadius: 5,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
+
+    borderWidth: 1,
+    borderColor: 'gray',
   },
   itemButtonText: {
-    color: 'gray',
+    color: 'white',
   },
   uploadButton: {
     backgroundColor: 'pink',
@@ -434,6 +454,7 @@ const styles = StyleSheet.create({
   uploadButtonText: {
     color: 'white',
     fontWeight: 'bold',
+    padding: 10,
   },
 });
 

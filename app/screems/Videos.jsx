@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        marginBottom: 70,
     },
     header: {
         flexDirection: 'row',
@@ -198,9 +199,6 @@ const styles = StyleSheet.create({
     circleImage: {
         width: '100%',
         height: '100%',
-    },
-    bottomNavMargin: {
-        paddingTop: 70,
     },
 });
 

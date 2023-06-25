@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
-import { getFirestore, collection, onSnapshot, query, getDocs, orderBy, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, query, getDocs, orderBy, doc, getDoc, where } from 'firebase/firestore';
 
 export default function ArtistListScreen() {
 
@@ -14,13 +14,16 @@ export default function ArtistListScreen() {
   const fetchArtists = async () => {
     try {
       const artistsCollection = collection(getFirestore(), 'pessoa');
-      const querySnapshot = await getDocs(artistsCollection);
+      const querySnapshot = await getDocs(
+        query(artistsCollection, where('uploaded', '==', 'yes'))
+      );
       const artistsData = querySnapshot.docs.map((doc) => doc.data());
       setArtists(artistsData);
     } catch (error) {
       console.error('Erro ao buscar os artistas:', error);
     }
   };
+  
 
 
   return (
@@ -29,7 +32,7 @@ export default function ArtistListScreen() {
 
       <FlatList
         data={artists}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.email}
         renderItem={({ item }) => (
           <View style={styles.horizontalItem}>
             <Image

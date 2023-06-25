@@ -6,12 +6,14 @@ import { Audio } from 'expo-av';
 
 const musicCover = require('../assets/logo.jpg');
 
-export default function MusicPage() {
+export default function MusicPage({item}) {
   const navigation = useNavigation();
 
   function goHome() {
     navigation.navigate('Home');
   }
+
+  console.log(item.url)
 
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -37,7 +39,7 @@ export default function MusicPage() {
   const loadSound = async () => {
     try {
       const { sound: audioSound } = await Audio.Sound.createAsync(
-        require('../assets/song.mp3'),
+        require('../assets/audio.mp3'),
         { shouldPlay: false },
         updatePlaybackStatus
       );
