@@ -1,33 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc } from 'firebase/firestore';
-import { FIREBASE_DB } from '../../FirebaseConfig';
-import { Video } from 'expo-av';
+import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
+import { getFirestore, collection, onSnapshot, query, getDocs, orderBy, doc, getDoc } from 'firebase/firestore';
 
-export default function VideoListScreen() {
+export default function ArtistListScreen() {
 
-  const [videos, setVideos] = useState([]);
-  const [artist, setArtist] = useState({});
-
+  const [artists, setArtists] = useState([]);
 
 
   useEffect(() => {
-    subscribeToVideos();
+    fetchArtists();
   }, []);
 
-  const subscribeToVideos = () => {
-    const videosCollection = collection(FIREBASE_DB, 'videos');
-    const artists = collection(FIREBASE_DB, 'pessoas');
-
-    const videosQuery = query(videosCollection, orderBy('createdAt', 'desc'));
-
-    onSnapshot(videosQuery, (snapshot) => {
-      const videosData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setVideos(videosData);
-    });
+  const fetchArtists = async () => {
+    try {
+      const artistsCollection = collection(getFirestore(), 'pessoa');
+      const querySnapshot = await getDocs(artistsCollection);
+      const artistsData = querySnapshot.docs.map((doc) => doc.data());
+      setArtists(artistsData);
+    } catch (error) {
+      console.error('Erro ao buscar os artistas:', error);
+    }
   };
 
 
@@ -36,19 +28,18 @@ export default function VideoListScreen() {
 
 
       <FlatList
-        data={videos}
+        data={artists}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.horizontalItem}>
-            <Video
-              source={{ uri: item.url }}
-              style={{ width: 300, height: 200, borderRadius: 10, margin: 10 }}
+            <Image
+              source={{ uri: item.imageUrl }}
+              style={{ width: 100, height: 100, borderRadius: 50, margin: 10 }}
               resizeMode="cover"
               horizontal
               useNativeControls
             />
-            <Text style={styles.horizontalTitle}>{item.title}</Text>
-            <Text style={styles.horizontalArtist}>{item.artistName}</Text>
+            <Text style={styles.horizontalTitle}>{item.name.concat(" ", item.surname)}</Text>
 
           </View>
         )}

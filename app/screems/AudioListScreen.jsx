@@ -4,7 +4,7 @@ import { collection, getDocs, query, getFirestore } from 'firebase/firestore';
 import { FIREBASE_DB, FIREBASE_STORAGE } from '../../FirebaseConfig';
 import { Audio } from 'expo-av';
 
-export default function AudioListScreen () {
+export default function AudioListScreen() {
   const [audios, setAudios] = useState([]);
   const [sound, setSound] = useState(null);
 
@@ -59,26 +59,28 @@ export default function AudioListScreen () {
         }
       }
     };
-
+/*
     const renderAudioItem = ({ item }) => (
       <View style={styles.horizontalItem}>
-          <Video
-              source={{ uri: item.url }}
-              style={{ width: 150, height: 150, borderRadius: '10px' }}
-              resizeMode="cover"
-              horizontal
-              useNativeControls
-          />
-          <Text style={styles.horizontalTitle}>{item.description}</Text>
+        <Video
+          source={{ uri: item.url }}
+          style={{ width: 150, height: 150, borderRadius: '10px' }}
+          resizeMode="cover"
+          horizontal
+          useNativeControls
+        />
+
+
       </View>
-  );
+    );*/
 
     return (
       <View style={{ marginBottom: 20 }}>
         <TouchableOpacity onPress={handlePress}>
           <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
         </TouchableOpacity>
-        <Text>{item.title}</Text>
+        <Text style={styles.horizontalTitle}>{item.title}</Text>
+        <Text style={styles.horizontalArtist}>{item.artistName}</Text>
       </View>
     );
   };
@@ -102,6 +104,17 @@ const styles = StyleSheet.create({
     height: 150,
     padding: 10,
     margin: 10,
+  },
+  horizontalTitle: {
+    marginTop: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'pink',
+
+  },
+  horizontalArtist: {
+    fontSize: 14,
+    color: 'pink',
   },
 
 });

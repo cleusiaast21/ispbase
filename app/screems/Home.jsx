@@ -6,6 +6,7 @@ import profileImage from '../assets/logo.jpg';
 import AudioListScreen from './AudioListScreen';
 import RadioListScreen from './RadioListScreen.jsx';
 import VideoListScreen from './VideoListScreen.jsx';
+import ArtistListScreen from './ArtistListScreen.jsx';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -15,6 +16,8 @@ export default function Home({ route }) {
 
     const { personId } = route.params;
     const [personName, setPersonName] = useState('');
+    const [surname, setSurname] = useState('');
+
     const [profileImageUrl, setProfileImageUrl] = useState('');
 
     const navigation = useNavigation();
@@ -28,6 +31,7 @@ export default function Home({ route }) {
                 if (docSnapshot.exists()) {
                     const data = docSnapshot.data();
                     setPersonName(data.name);
+                    setSurname(data.surname);
                     setProfileImageUrl(data.imageUrl);
                 }
             } catch (error) {
@@ -58,6 +62,10 @@ export default function Home({ route }) {
         navigation.navigate('ProfilePage', { personId: registeredPersonId });
     }
 
+    function goToMusicPage() {
+        navigation.navigate('MusicPage',{audio});
+    }
+
 
     return (
 
@@ -82,6 +90,9 @@ export default function Home({ route }) {
                 <Text style={styles.sectionTitle}>Áudios</Text>
                 <AudioListScreen />
 
+                <Text style={styles.sectionTitle}>Artistas Recomendados</Text>
+                <ArtistListScreen />
+
                 <Text style={styles.sectionTitle}>Estações de Rádio</Text>
                 <RadioListScreen />
 
@@ -98,7 +109,7 @@ export default function Home({ route }) {
                         <Ionicons name="film-outline" size={30} color="pink" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={goToMusicPage}>
                         <View style={styles.circleContainer} >
                             <Image source={profileImage} style={styles.circleImage} />
                         </View>

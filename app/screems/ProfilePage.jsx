@@ -6,6 +6,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'fire
 import { FIREBASE_DB, FIREBASE_STORAGE } from '../../FirebaseConfig';
 import * as DocumentPicker from 'expo-document-picker';
 import { useNavigation } from '@react-navigation/native';
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 export default function Profile({ route }) {
@@ -14,6 +16,7 @@ export default function Profile({ route }) {
 
   const { personId } = route.params;
   const [personName, setPersonName] = useState('');
+  const [personSurname, setPersonSurname] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState('');
@@ -76,6 +79,7 @@ export default function Profile({ route }) {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data();
           setPersonName(data.name);
+          setPersonSurname(data.surname);
           setProfileImageUrl(data.imageUrl || null);
         }
       } catch (error) {
@@ -186,7 +190,7 @@ export default function Profile({ route }) {
 
   const handleUploadNewItem = async () => {
 
-    if (title && description && thumbnailUri && itemUri) {
+    if (title && description && itemUri) {
 
       if (itemType === 'audio') {
         try {
@@ -209,6 +213,7 @@ export default function Profile({ route }) {
             url,
             thumbnailURL,
             artist: personId,
+            artistName: personName.concat(" ", personSurname),
           };
 
           const audiosCollection = collection(FIREBASE_DB, 'audios');
@@ -226,43 +231,26 @@ export default function Profile({ route }) {
 
           const videoUri = itemUri;
 
-          const thumbnailResponse = await fetch(thumbnailUri);
-          const thumbnailBlob = await thumbnailResponse.blob();
-
           const videoResponse = await fetch(videoUri);
           const videoBlob = await videoResponse.blob();
 
-          // Generate unique filenames for the thumbnail and video
-          const thumbnailExtension = thumbnailUri.split('.').pop();
-          const thumbnailFilename = `${uuidv4()}.${thumbnailExtension}`;
 
           const videoExtension = videoUri.split('.').pop();
           const videoFilename = `${uuidv4()}.${videoExtension}`;
 
-          // Upload the thumbnail to "thumbnails" folder in Firebase Storage
-          const thumbnailStorageRef = ref(FIREBASE_STORAGE, `thumbnails/${thumbnailFilename}`);
-          await uploadBytes(thumbnailStorageRef, thumbnailBlob);
-
-          // Get the download URL of the thumbnail
-          const thumbnailURL = await getDownloadURL(thumbnailStorageRef);
-
-          // Upload the video to "videos" folder in Firebase Storage
           const videoStorageRef = ref(FIREBASE_STORAGE, `videos/${videoFilename}`);
           const videoSnapshot = await uploadBytes(videoStorageRef, videoBlob);
 
-          // Get the download URL of the video
           const url = await getDownloadURL(videoSnapshot.ref);
 
-          // Save the paths, URLs, and description to Firestore
           const videoData = {
             title: title,
             description: description,
-            thumbnailPath: thumbnailStorageRef.fullPath,
-            thumbnailURL,
             videoPath: videoStorageRef.fullPath,
             url,
             createdAt: new Date(),
             artist: personId,
+            artistName: personName.concat(" ", personSurname),
           };
 
           const videosCollection = collection(FIREBASE_DB, 'videos');
@@ -296,12 +284,12 @@ export default function Profile({ route }) {
         <TouchableOpacity onPress={handleChangeProfilePicture}>
           <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
         </TouchableOpacity>
-        <Text style={styles.label}>Hello, {personName}!</Text>
+        <Text style={styles.label}>Olá, {personName}</Text>
       </View>
 
       <View style={styles.options}>
         <TouchableOpacity style={styles.button} >
-          <Text style={styles.buttonText}>Ver mídias</Text>
+          <Text style={styles.buttonText}>Ver meus mídias</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={() => setShowForm(true)}>
@@ -448,3 +436,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+

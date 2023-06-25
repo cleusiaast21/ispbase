@@ -57,7 +57,6 @@ export default function Login() {
 
 
   return (
-    <ImageBackground source={backgroundImg} style={styles.backgroundImage}>
 
       <View style={styles.container}>
 
@@ -93,7 +92,6 @@ export default function Login() {
         </TouchableOpacity>
 
       </View>
-    </ImageBackground>
   )
 
 }
@@ -101,17 +99,13 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover', // or 'stretch' if you want to stretch the image
+    backgroundColor: 'white',
   },
   logo: {
-    width: 300,
-    height: 200,
+    width: 250,
+    height: 155,
     marginBottom: 50,
   },
   inputView: {

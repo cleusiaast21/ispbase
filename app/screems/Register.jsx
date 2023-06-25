@@ -56,6 +56,7 @@ export default function Register() {
           password,
           email,
           imageUrl: defaultImageUrl,
+          uploaded: 'no',
         });
         console.log('Nova pessoa criada com ID:', docRef.id);
         navigation.navigate('Login');
@@ -74,7 +75,6 @@ export default function Register() {
       <View style={styles.container}>
 
 
-        <ScrollView>
 
           <Image source={logo} style={styles.logo} />
 
@@ -82,7 +82,7 @@ export default function Register() {
           <View style={styles.inputView}>
             <TextInput
               style={styles.inputText}
-              placeholder="Name"
+              placeholder="Nome"
               placeholderTextColor="#fff"
               value={name}
               onChangeText={(text) => setName(text)}
@@ -127,9 +127,6 @@ export default function Register() {
           </TouchableOpacity>
 
 
-        </ScrollView>
-
-
 
       </View>
     </>
@@ -147,9 +144,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 300,
-    height: 200,
-    marginTop: 100,
+    width: 250,
+    height: 155,
+    marginTop: 20,
     marginBottom: 50,
   },
   inputView: {
