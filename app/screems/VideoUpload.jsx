@@ -121,6 +121,7 @@ const VideoUploadScreen = () => {
         setThumbnailUri('');
         setThumbnailURL('');
       } catch (error) {
+
         console.log('Error uploading video to the database:', error);
       }
     } else {
@@ -198,10 +199,13 @@ const VideoUploadScreen = () => {
         <Text>Select Thumbnail</Text>
       </TouchableOpacity>
 
+      
 
-      <TouchableOpacity onPress={handleUploadPress}>
+
+<TouchableOpacity onPress={handleUploadPress}>
         <Text>Upload Video</Text>
       </TouchableOpacity>
+
 
       {thumbnailUri && (
         <View style={{ marginBottom: 16 }}>

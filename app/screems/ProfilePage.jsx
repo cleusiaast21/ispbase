@@ -223,38 +223,45 @@ export default function Profile({ route }) {
       } else if (itemType === 'video') {
 
         try {
+
+          const videoUri = itemUri;
+
           const thumbnailResponse = await fetch(thumbnailUri);
           const thumbnailBlob = await thumbnailResponse.blob();
 
-          const videoResponse = await fetch(selectedAudio.uri);
+          const videoResponse = await fetch(videoUri);
           const videoBlob = await videoResponse.blob();
 
           // Generate unique filenames for the thumbnail and video
           const thumbnailExtension = thumbnailUri.split('.').pop();
           const thumbnailFilename = `${uuidv4()}.${thumbnailExtension}`;
 
-          const videoExtension = selectedAudio.uri.split('.').pop();
+          const videoExtension = videoUri.split('.').pop();
           const videoFilename = `${uuidv4()}.${videoExtension}`;
 
           // Upload the thumbnail to "thumbnails" folder in Firebase Storage
           const thumbnailStorageRef = ref(FIREBASE_STORAGE, `thumbnails/${thumbnailFilename}`);
           await uploadBytes(thumbnailStorageRef, thumbnailBlob);
 
+          // Get the download URL of the thumbnail
+          const thumbnailURL = await getDownloadURL(thumbnailStorageRef);
+
           // Upload the video to "videos" folder in Firebase Storage
           const videoStorageRef = ref(FIREBASE_STORAGE, `videos/${videoFilename}`);
           const videoSnapshot = await uploadBytes(videoStorageRef, videoBlob);
 
           // Get the download URL of the video
-          const videoURL = await getDownloadURL(videoSnapshot.ref);
+          const url = await getDownloadURL(videoSnapshot.ref);
 
-          // Save the paths and video URL to Firestore
+          // Save the paths, URLs, and description to Firestore
           const videoData = {
             title: title,
             description: description,
             thumbnailPath: thumbnailStorageRef.fullPath,
+            thumbnailURL,
             videoPath: videoStorageRef.fullPath,
-            videoURL: videoURL, // Add the video URL to the document data
-            createdAt: new Date(), // Add the current timestamp as the created date
+            url,
+            createdAt: new Date(),
             artist: personId,
           };
 
@@ -262,9 +269,13 @@ export default function Profile({ route }) {
           await addDoc(videosCollection, videoData);
 
           console.log('Video successfully uploaded to the database!');
+          alert('Vídeo enviado com sucesso!');
+
 
         } catch (error) {
           console.log('Error uploading video to the database:', error);
+          alert('Erro ao fazer upload de vídeo.')
+
         }
 
       }

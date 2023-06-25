@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import VideoUploadPage from './app/screems/VideoUpload';
+import VideoUpload from './app/screems/VideoUpload';
 import UploadScreen from './app/screems/UploadScreen';
 import ImageUploadScreen from './app/screems/ImageUploadScreen';
 import AudioUploadScreen from './app/screems/AudioUploadScreen';
@@ -35,7 +35,7 @@ const App = () => {
           options={{ headerShown: true }} />
 
         <Stack.Screen name="VideoUpload"
-          component={VideoUploadPage}
+          component={VideoUpload}
           options={{ headerShown: true }} />
 
         <Stack.Screen name="UploadScreen"
