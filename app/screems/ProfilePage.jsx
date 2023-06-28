@@ -137,7 +137,7 @@ export default function Profile({ route }) {
           imageUrl: downloadURL,
         });
 
-        Alert.alert('Success', 'Profile picture updated!');
+        Alert.alert('Success', 'Foto de perfil actualizada!');
       }
     } catch (error) {
       console.log('Error changing profile picture:', error);

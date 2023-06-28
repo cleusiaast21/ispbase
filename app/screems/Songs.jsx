@@ -6,7 +6,7 @@ import profileImage from '../assets/logo.jpg';
 import AudioListScreen from './AudioListScreen.jsx';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
+import PlayListSongs from './PlayListSongs.jsx';
 
 
 export default function Home({ route }) {
@@ -75,10 +75,10 @@ export default function Home({ route }) {
                 <View style={styles.content}>
 
                     <Text style={styles.sectionTitle}>Músicas Favoritas</Text>
-                    <AudioListScreen />
+                    <PlayListSongs />
 
                     <Text style={styles.sectionTitle}>Músicas</Text>
-                    <AudioListScreen />
+                    <PlayListSongs />
 
                 </View>
 

@@ -10,6 +10,7 @@ import Videos from './app/screems/Videos';
 import Songs from './app/screems/Songs';
 import MusicPage from './app/screems/MusicPage';
 import ArtistPage from './app/screems/ArtistPage';
+import PlaylistPage from './app/screems/PlaylistPage';
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,9 @@ const App = () => {
           component={ArtistPage}
           options={{ headerShown: false }} />
 
+        <Stack.Screen name="PlaylistPage"
+          component={PlaylistPage}
+          options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

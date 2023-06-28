@@ -4,7 +4,7 @@ import { collection, getDocs, query, getFirestore } from 'firebase/firestore';
 import { FIREBASE_DB, FIREBASE_STORAGE } from '../../FirebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 
-export default function AudioListScreen() {
+export default function PlayListSongs() {
   const [audios, setAudios] = useState([]);
 
   const navigation = useNavigation();
@@ -24,8 +24,9 @@ export default function AudioListScreen() {
     }
   };
 
-  function goToMusicPage(item) {
-    navigation.navigate('MusicPage', { item });
+  function goToPlaylistPage(item) {
+    console.log(item.url);
+    navigation.navigate('PlaylistPage', { item });
   }
 
   return (
@@ -35,7 +36,7 @@ export default function AudioListScreen() {
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => (
           <View >
-            <TouchableOpacity onPress={() => goToMusicPage(item)}>
+            <TouchableOpacity onPress={() => goToPlaylistPage(item)}>
               <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
             </TouchableOpacity>
             <Text style={styles.horizontalTitle}>{item.title}</Text>

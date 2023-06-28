@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Animated, PanResponder } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Animated, PanResponder, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Audio } from 'expo-av';
+import Slider from '@react-native-community/slider';
+import * as FileSystem from 'expo-file-system';
+
 
 export default function MusicPage({ route }) {
   const { item } = route.params;
@@ -14,6 +17,8 @@ export default function MusicPage({ route }) {
   const [duration, setDuration] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false); // Track the loading state
+  const [loadingAudio, setLoadingAudio] = useState(false); // Track the loading state
+
 
   const pan = new Animated.ValueXY();
 
@@ -69,17 +74,67 @@ export default function MusicPage({ route }) {
     }
   };
 
+  const handleSliderChange = (value) => {
+    if (sound) {
+      sound.setPositionAsync(value);
+      setPosition(value);
+    }
+  };
 
   const updatePlaybackStatus = (status) => {
     if (status.isLoaded) {
       setPosition(status.positionMillis);
       setDuration(status.durationMillis);
+      if (status.didJustFinish) {
+        // Song has ended
+        setIsPlaying(false);
+        setPosition(0);
+      }
     }
   };
 
   const toggleLike = () => {
     setIsLiked(!isLiked);
   };
+
+
+  const handleDownloadAudio = async () => {
+    try {
+      setLoadingAudio(true); // Start loading
+  
+      // Create a folder for the audio files
+      const folderName = 'ISPMEDIA';
+      const folderInfo = await FileSystem.getInfoAsync(FileSystem.documentDirectory + folderName);
+      if (!folderInfo.exists) {
+        await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + folderName);
+      }
+  
+      // Get the file extension from the URL
+      const fileExtension = item.url.substring(item.url.lastIndexOf('.') + 1);
+  
+      // Create a unique file name using a timestamp
+      const fileName = `ispmedia_${Date.now()}.${fileExtension}`;
+  
+      // Create the file path by combining the folder path and file name
+      const filePath = FileSystem.documentDirectory + folderName + '/' + fileName;
+
+      console.log('Downloading audio');
+  
+      // Download the audio file
+      const downloadResumable = FileSystem.createDownloadResumable(item.url, filePath);
+      const { uri } = await downloadResumable.downloadAsync();
+  
+      setLoadingAudio(false); // Stop loading
+  
+      console.log('Audio downloaded:', uri);
+      Alert.alert('Success', 'Áudio baixado com sucesso.');
+    } catch (error) {
+      console.error('Error downloading audio:', error);
+    }
+  };
+
+  
+  
 
   return (
     <Animated.View style={[styles.container, pan.getLayout()]} {...panResponder.panHandlers}>
@@ -108,16 +163,29 @@ export default function MusicPage({ route }) {
         <Text style={styles.artist}>{item.artistName}</Text>
 
         <View style={styles.shareView}>
-          <Ionicons name="download-outline" size={30} color="pink" style={styles.share} />
+          <TouchableOpacity onPress={handleDownloadAudio}>
+            <Ionicons name="download-outline" size={30} color="pink" style={styles.share} />
+          </TouchableOpacity>
+
           <Ionicons name="share-social-outline" size={30} color="pink" style={styles.download} />
         </View>
 
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={duration}
+          value={position}
+          minimumTrackTintColor="pink"
+          maximumTrackTintColor="grey"
+          onSlidingComplete={handleSliderChange}
+          thumbTintColor="pink"
+          thumbStyle={styles.sliderThumb}
+          trackStyle={styles.sliderTrack}
+        />
+
         <View style={styles.controls}>
-          <TouchableOpacity
-            onPress={handlePlayAudio}
-            disabled={loading} // Disable the button when loading is true
-          >
-            {loading ? ( // Show loading indicator while loading is true
+          <TouchableOpacity onPress={handlePlayAudio} disabled={loading}>
+            {loading ? (
               <ActivityIndicator size="large" color="pink" />
             ) : isPlaying ? (
               <Ionicons name="pause-circle" size={100} color="pink" />
@@ -162,7 +230,7 @@ const styles = StyleSheet.create({
   },
   shareView: {
     flexDirection: 'row',
-    marginBottom: 15,
+    marginBottom: '10%',
   },
   share: {
     marginRight: 230,

@@ -42,7 +42,7 @@ export default function Login() {
           console.log('Entered with ID: ', registeredPersonId);
           navigation.navigate('Home', { personId: registeredPersonId });
         } else {
-          Alert.alert('Falha na internet','Verifique a sua conexão a internet');
+          Alert.alert('Conta inexistente','Por favor verifique os dados inseridos.');
         }
       } catch (error) {
         console.log('Error:', error);
