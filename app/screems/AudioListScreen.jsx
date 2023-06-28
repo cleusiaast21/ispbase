@@ -9,7 +9,6 @@ export default function AudioListScreen() {
 
   const navigation = useNavigation();
 
-
   useEffect(() => {
     fetchAudios();
   }, []);
@@ -25,9 +24,9 @@ export default function AudioListScreen() {
     }
   };
 
-  function goToMusicPage({item}){
-    console.log(item.url)
-    navigation.navigate('MusicPage',{item});
+  function goToMusicPage(item) {
+    console.log(item.url);
+    navigation.navigate('MusicPage', { item });
   }
 
   return (
@@ -36,19 +35,20 @@ export default function AudioListScreen() {
         data={audios}
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => (
-          <View style={{ marginBottom: 20 }}>
-          <TouchableOpacity >
-            <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
-          </TouchableOpacity>
-          <Text style={styles.horizontalTitle}>{item.title}</Text>
-          <Text style={styles.horizontalArtist}>{item.artistName}</Text>
-        </View>)}
+          <View >
+            <TouchableOpacity onPress={() => goToMusicPage(item)}>
+              <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
+            </TouchableOpacity>
+            <Text style={styles.horizontalTitle}>{item.title}</Text>
+            <Text style={styles.horizontalArtist}>{item.artistName}</Text>
+          </View>
+        )}
         horizontal
         showsHorizontalScrollIndicator={true}
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   item: {
@@ -56,20 +56,18 @@ const styles = StyleSheet.create({
     height: 150,
     padding: 10,
     margin: 10,
+    borderRadius: 10,
   },
   horizontalTitle: {
     marginTop: 5,
     fontSize: 16,
     fontWeight: 'bold',
     color: 'pink',
-    marginLeft: 5,
-
+    marginLeft: 10,
   },
   horizontalArtist: {
     fontSize: 14,
     color: 'pink',
-    marginLeft: 5,
-
+    marginLeft: 10,
   },
-
 });

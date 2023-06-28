@@ -8,7 +8,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import { useNavigation } from '@react-navigation/native';
 import { v4 as uuidv4 } from 'uuid';
 import { Ionicons } from '@expo/vector-icons';
-
+import ArtistMedia from './ArtistMedia';
 
 
 export default function Profile({ route }) {
@@ -20,6 +20,7 @@ export default function Profile({ route }) {
   const [personSurname, setPersonSurname] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showMidia, setShowMidia] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
@@ -27,7 +28,8 @@ export default function Profile({ route }) {
   const [itemUri, setItemUri] = useState('');
   const [itemType, setItemType] = useState('');
   const [selectedAudio, setSelectedAudio] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [activeButton, setActiveButton] = useState(''); // Initialize with the active button's key
+
 
 
   const pickAudio = async () => {
@@ -215,7 +217,13 @@ export default function Profile({ route }) {
             thumbnailURL,
             artist: personId,
             artistName: personName.concat(" ", personSurname),
+            type: 'audio',
           };
+
+          const docRef = doc(FIREBASE_DB, 'pessoa', personId);
+          await updateDoc(docRef, {
+            uploaded: 'yes',
+          });
 
           const audiosCollection = collection(FIREBASE_DB, 'audios');
           await addDoc(audiosCollection, audioData);
@@ -252,10 +260,16 @@ export default function Profile({ route }) {
             createdAt: new Date(),
             artist: personId,
             artistName: personName.concat(" ", personSurname),
+            type: 'video',
           };
 
           const videosCollection = collection(FIREBASE_DB, 'videos');
           await addDoc(videosCollection, videoData);
+
+          const docRef = doc(FIREBASE_DB, 'pessoa', personId);
+          await updateDoc(docRef, {
+            uploaded: 'yes',
+          });
 
           console.log('Video successfully uploaded to the database!');
           alert('Vídeo enviado com sucesso!');
@@ -283,24 +297,60 @@ export default function Profile({ route }) {
     <View style={styles.container}>
       <View style={styles.header}>
 
-      <View style={{ position: 'fixed', top: 0, right: 0, marginBottom: 10 }}>
-        <Ionicons onPress={logout} name="log-out-outline" size={30} color="red"  />
-       </View> 
-        <TouchableOpacity onPress={handleChangeProfilePicture}>
-          <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons style={styles.iconBack} name="chevron-back-outline" size={30} color="black" />
         </TouchableOpacity>
+
+        <View >
+          <Ionicons onPress={logout} name="log-out-outline" size={30} color="red" />
+        </View>
+
+      </View>
+
+      <View style={styles.fundo}>
+        <View style={styles.borderImage}>
+          <TouchableOpacity onPress={handleChangeProfilePicture}>
+            <Image source={{ uri: profileImageUrl }} style={styles.profileImage} />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.label}>{personName} {personSurname}</Text>
+
+        <View style={styles.options}>
+          <TouchableOpacity
+            style={[styles.button, activeButton === 'ver-meus-videos' && styles.activeButton]} // Apply activeButton style if activeButton is 'ver-meus-videos'
+            onPress={() => {
+              setActiveButton('ver-meus-videos');
+              setShowForm(false);
+              setShowMidia(true);
+            }}
+          >
+            <Text style={styles.buttonText}>Ver meus mídias</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              setActiveButton('postar-novo-midia');
+              setShowForm(true);
+              setShowMidia(false);
+
+            }}
+            style={[styles.button, activeButton === 'postar-novo-midia' && styles.activeButton]}
+          >
+            <Text style={styles.buttonText}>Postar novo mídia</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <View style={styles.options}>
-        <TouchableOpacity style={styles.button} >
-          <Text style={styles.buttonText}>Ver meus mídias</Text>
-        </TouchableOpacity>
+      {showMidia && (
+        <View style={styles.formContainer}>
 
-        <TouchableOpacity style={styles.button} onPress={() => setShowForm(true)}>
-          <Text style={styles.buttonText}>Postar novo mídia</Text>
-        </TouchableOpacity>
-      </View>
+          <ArtistMedia artistId={personId} />
+
+        </View>
+
+      )}
+
+
       {showForm && (
         <View style={styles.formContainer}>
 
@@ -351,24 +401,21 @@ export default function Profile({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-  },
-  options: {
-    flexDirection: 'row',
-
+    flex: 1,
   },
   header: {
     alignItems: 'center',
     marginBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%',
+    marginTop: "10%",
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+  options: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   label: {
     fontSize: 20,
@@ -405,6 +452,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     backgroundColor: 'pink',
+    color: 'white',
+    fontWeight: 'bold',
 
   },
   thumbnailButton: {
@@ -415,7 +464,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
-
     borderWidth: 1,
     borderColor: 'gray',
   },
@@ -436,7 +484,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
-
     borderWidth: 1,
     borderColor: 'gray',
   },
@@ -456,5 +503,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 10,
   },
+  activeButton: {
+    backgroundColor: '#FE496C',
+  },
+  fundo: {
+    justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  borderImage: {
+    backgroundColor: "pink",
+    width: 120,
+    height: 120,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  }
 });
 

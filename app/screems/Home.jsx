@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../FirebaseConfig';
 import profileImage from '../assets/logo.jpg';
@@ -9,6 +9,7 @@ import VideoListScreen from './VideoListScreen.jsx';
 import ArtistListScreen from './ArtistListScreen.jsx';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import gradientLogo from '../assets/gradient.jpg';
 
 
 export default function Home({ route }) {
@@ -53,7 +54,7 @@ export default function Home({ route }) {
 
     function goToSongs() {
         const registeredPersonId = personId;
-        navigation.navigate('Videos', { personId: registeredPersonId });
+        navigation.navigate('Songs', { personId: registeredPersonId });
     }
 
     function goToProfilePage() {
@@ -64,35 +65,41 @@ export default function Home({ route }) {
     return (
 
         <>
-            <ScrollView style={styles.container}>
+            
+                <ScrollView style={styles.container}>
 
-                <View style={styles.header}>
-                    <Text style={styles.label}>Olá, {personName}!</Text>
+                    <View style={styles.header}>
+                        <Text style={styles.label}>Olá, {personName}!</Text>
 
-                    <TouchableOpacity onPress={goToProfilePage}>
-                        <Image
-                            style={styles.profileImage}
-                            source={profileImageUrl ? { uri: profileImageUrl } : require('../assets/loading.jpg')}
-                        />
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={goToProfilePage}>
+                            <Image
+                                style={styles.profileImage}
+                                source={profileImageUrl ? { uri: profileImageUrl } : require('../assets/loading.jpg')}
+                            />
+                        </TouchableOpacity>
 
-                </View>
+                    </View>
 
-                <Text style={styles.sectionTitle}>Videos</Text>
-                <VideoListScreen />
+                    <View style={styles.content}>
 
-                <Text style={styles.sectionTitle}>Áudios</Text>
-                <AudioListScreen />
 
-                <Text style={styles.sectionTitle}>Artistas Recomendados</Text>
-                <ArtistListScreen />
+                        <Text style={styles.sectionTitle}>Videos</Text>
+                        <VideoListScreen />
 
-                <Text style={styles.sectionTitle}>Estações de Rádio</Text>
-                <RadioListScreen />
+                        <Text style={styles.sectionTitle}>Áudios</Text>
+                        <AudioListScreen />
 
-            </ScrollView>
+                        <Text style={styles.sectionTitle}>Artistas Recomendados</Text>
+                        <ArtistListScreen />
 
-            <View style={styles.bottomNavMargin}>
+                        <Text style={styles.sectionTitle}>Estações de Rádio</Text>
+                        <RadioListScreen />
+
+                    </View>
+
+
+                </ScrollView>
+
 
                 <View style={styles.bottomNav}>
                     <TouchableOpacity >
@@ -118,7 +125,6 @@ export default function Home({ route }) {
                     </TouchableOpacity>
                 </View>
 
-            </View>
 
         </>
 
@@ -130,6 +136,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+
+    },
+    backgroundImage: {
+        resizeMode: 'cover', // Adjust the resizeMode as needed
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    content: {
         marginBottom: 70,
     },
     header: {

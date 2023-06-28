@@ -71,15 +71,20 @@ export default function Home({ route }) {
                     </TouchableOpacity>
                 </View>
 
-                <Text style={styles.sectionTitle}>Vídeos Favoritos</Text>
-                <VideoListScreen />
+                <View style={styles.content}>
 
-                <Text style={styles.sectionTitle}>Vídeos</Text>
-                <VideoListScreen />
+
+                    <Text style={styles.sectionTitle}>Vídeos Favoritos</Text>
+                    <VideoListScreen />
+
+                    <Text style={styles.sectionTitle}>Vídeos</Text>
+                    <VideoListScreen />
+
+                </View>
+
 
             </ScrollView>
 
-            <View style={styles.bottomNavMargin}>
 
                 <View style={styles.bottomNav}>
                     <TouchableOpacity onPress={goHome}>
@@ -105,7 +110,6 @@ export default function Home({ route }) {
                     </TouchableOpacity>
                 </View>
 
-            </View>
 
         </>
 
@@ -116,7 +120,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+    },
+    content: {
         marginBottom: 70,
+
     },
     header: {
         flexDirection: 'row',

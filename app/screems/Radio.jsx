@@ -82,32 +82,29 @@ export default function Home({ route }) {
 
             </ScrollView>
 
-            <View style={styles.bottomNavMargin}>
 
-                <View style={styles.bottomNav}>
-                    <TouchableOpacity onPress={goHome}>
-                        <Ionicons name="home-outline" size={30} color="pink" />
-                    </TouchableOpacity>
+            <View style={styles.bottomNav}>
+                <TouchableOpacity onPress={goHome}>
+                    <Ionicons name="home-outline" size={30} color="pink" />
+                </TouchableOpacity>
 
-                    <TouchableOpacity onPress={goToVideos}>
-                        <Ionicons name="film-outline" size={30} color="pink" />
-                    </TouchableOpacity>
+                <TouchableOpacity onPress={goToVideos}>
+                    <Ionicons name="film-outline" size={30} color="pink" />
+                </TouchableOpacity>
 
-                    <TouchableOpacity>
-                        <View style={styles.circleContainer} >
-                            <Image source={profileImage} style={styles.circleImage} />
-                        </View>
-                    </TouchableOpacity>
+                <TouchableOpacity>
+                    <View style={styles.circleContainer} >
+                        <Image source={profileImage} style={styles.circleImage} />
+                    </View>
+                </TouchableOpacity>
 
-                    <TouchableOpacity onPress={goToSongs}>
-                        <Ionicons name="musical-notes-outline" size={30} color="pink" />
-                    </TouchableOpacity>
+                <TouchableOpacity onPress={goToSongs}>
+                    <Ionicons name="musical-notes-outline" size={30} color="pink" />
+                </TouchableOpacity>
 
-                    <TouchableOpacity >
-                        <Ionicons name="radio-outline" size={30} color="purple" />
-                    </TouchableOpacity>
-                </View>
-
+                <TouchableOpacity >
+                    <Ionicons name="radio-outline" size={30} color="purple" />
+                </TouchableOpacity>
             </View>
 
         </>
@@ -120,6 +117,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+    },
+
+    content: {
+        marginBottom: 70,
+
     },
     header: {
         flexDirection: 'row',
@@ -202,9 +204,6 @@ const styles = StyleSheet.create({
     circleImage: {
         width: '100%',
         height: '100%',
-    },
-    bottomNavMargin: {
-        paddingTop: 70,
     },
 });
 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { getFirestore, collection, onSnapshot, query, getDocs, orderBy, doc, getDoc, where } from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ArtistListScreen() {
 
   const [artists, setArtists] = useState([]);
 
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchArtists();
@@ -23,34 +25,41 @@ export default function ArtistListScreen() {
       console.error('Erro ao buscar os artistas:', error);
     }
   };
-  
+
+  function goToArtistPage(item) {
+    /*const registeredPersonId = personId;
+    navigation.navigate('ArtistPage', { item.id });*/
+  }
+
 
 
   return (
     <View style={{ flex: 1 }}>
 
-
       <FlatList
         data={artists}
         keyExtractor={(item) => item.email}
         renderItem={({ item }) => (
-          <View style={styles.horizontalItem}>
-            <Image
-              source={{ uri: item.imageUrl }}
-              style={{ width: 100, height: 100, borderRadius: 50, margin: 10 }}
-              resizeMode="cover"
-              horizontal
-              useNativeControls
-            />
-            <Text style={styles.horizontalTitle}>{item.name.concat(" ", item.surname)}</Text>
 
+          <View style={styles.horizontalItem}>
+            <TouchableOpacity onPress={() => goToArtistPage(item)}>
+              <Image
+                source={{ uri: item.imageUrl }}
+                style={{ width: 100, height: 100, borderRadius: 50, margin: 10 }}
+                resizeMode="cover"
+                horizontal
+                useNativeControls
+              />
+            </TouchableOpacity>
+            <Text style={styles.horizontalTitle}>{item.name.concat(" ", item.surname)}</Text>
           </View>
-        )}
+        )
+        }
         horizontal
         showsHorizontalScrollIndicator={true}
         indicatorStyle="pink"
       />
-    </View>
+    </View >
   );
 };
 

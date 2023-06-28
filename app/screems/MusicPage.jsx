@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Animated, PanResponder } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Audio } from 'expo-av';
 
-const musicCover = require('../assets/logo.jpg');
-
-export default function MusicPage({item}) {
+export default function MusicPage({ route }) {
+  const { item } = route.params;
   const navigation = useNavigation();
-
-  function goHome() {
-    navigation.navigate('Home');
-  }
-
-  console.log(item.url)
 
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [loading, setLoading] = useState(false); // Track the loading state
+
+  const pan = new Animated.ValueXY();
+
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: Animated.event([null, { dy: pan.y }], { useNativeDriver: false }),
+    onPanResponderRelease: (e, gesture) => {
+      if (gesture.dy > 50) {
+        navigation.goBack();
+      } else {
+        Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
+      }
+    },
+  });
 
   useEffect(() => {
     return () => {
@@ -36,18 +44,31 @@ export default function MusicPage({item}) {
     }
   }, [sound]);
 
-  const loadSound = async () => {
+  const handlePlayAudio = async () => {
     try {
-      const { sound: audioSound } = await Audio.Sound.createAsync(
-        require('../assets/audio.mp3'),
-        { shouldPlay: false },
-        updatePlaybackStatus
-      );
-      setSound(audioSound);
+      if (sound === null) {
+        setLoading(true); // Start loading
+        const { sound: audioSound } = await Audio.Sound.createAsync(
+          { uri: item.url },
+          { shouldPlay: true },
+          updatePlaybackStatus
+        );
+        setLoading(false); // Stop loading
+        setSound(audioSound);
+        setIsPlaying(true);
+      } else {
+        if (isPlaying) {
+          await sound.pauseAsync();
+        } else {
+          await sound.playAsync();
+        }
+        setIsPlaying(!isPlaying);
+      }
     } catch (error) {
-      console.log('Error loading audio:', error);
+      console.error('Error playing audio:', error);
     }
   };
+
 
   const updatePlaybackStatus = (status) => {
     if (status.isLoaded) {
@@ -56,33 +77,14 @@ export default function MusicPage({item}) {
     }
   };
 
-  const togglePlayback = async () => {
-    try {
-      if (sound) {
-        if (isPlaying) {
-          await sound.pauseAsync();
-          setIsPlaying(false);
-        } else {
-          await sound.playAsync();
-          setIsPlaying(true);
-        }
-      } else {
-        await loadSound();
-        setIsPlaying(true);
-      }
-    } catch (error) {
-      console.log('Error toggling playback:', error);
-    }
-  };
-
   const toggleLike = () => {
     setIsLiked(!isLiked);
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, pan.getLayout()]} {...panResponder.panHandlers}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={goHome}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons style={styles.iconBack} name="chevron-back-outline" size={30} color="black" />
         </TouchableOpacity>
 
@@ -99,21 +101,25 @@ export default function MusicPage({item}) {
 
       <View style={styles.song}>
         <View style={styles.coverBack}>
-          <Image source={musicCover} style={styles.cover} />
+          <Image source={{ uri: item.thumbnailURL }} style={styles.cover} />
         </View>
 
-        <Text style={styles.title}>At My Worst</Text>
-        <Text style={styles.artist}>Pink Sweat$ ft. Kehlani</Text>
+        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.artist}>{item.artistName}</Text>
 
         <View style={styles.shareView}>
           <Ionicons name="download-outline" size={30} color="pink" style={styles.share} />
           <Ionicons name="share-social-outline" size={30} color="pink" style={styles.download} />
         </View>
 
-
         <View style={styles.controls}>
-          <TouchableOpacity onPress={togglePlayback}>
-            {isPlaying ? (
+          <TouchableOpacity
+            onPress={handlePlayAudio}
+            disabled={loading} // Disable the button when loading is true
+          >
+            {loading ? ( // Show loading indicator while loading is true
+              <ActivityIndicator size="large" color="pink" />
+            ) : isPlaying ? (
               <Ionicons name="pause-circle" size={100} color="pink" />
             ) : (
               <Ionicons name="play-circle" size={100} color="pink" />
@@ -121,7 +127,7 @@ export default function MusicPage({item}) {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -134,14 +140,11 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    marginTop: 70,
-  },
-  iconBack: {
-    marginRight: 10,
+    marginTop: '15%',
   },
   label: {
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 20,
     color: 'grey',
     paddingRight: 100,
     paddingLeft: 100,
@@ -153,8 +156,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cover: {
-    width: 250,
-    height: 250,
+    width: 150,
+    height: 150,
     borderRadius: 150,
   },
   shareView: {
@@ -165,8 +168,8 @@ const styles = StyleSheet.create({
     marginRight: 230,
   },
   coverBack: {
-    width: 300,
-    height: 300,
+    width: 175,
+    height: 175,
     marginBottom: 50,
     borderRadius: 200,
     backgroundColor: 'pink',

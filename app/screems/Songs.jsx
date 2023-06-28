@@ -72,41 +72,44 @@ export default function Home({ route }) {
                     </TouchableOpacity>
                 </View>
 
-                <Text style={styles.sectionTitle}>Músicas Favoritas</Text>
-                <AudioListScreen />
+                <View style={styles.content}>
 
-                <Text style={styles.sectionTitle}>Músicas</Text>
-                <AudioListScreen />
+                    <Text style={styles.sectionTitle}>Músicas Favoritas</Text>
+                    <AudioListScreen />
+
+                    <Text style={styles.sectionTitle}>Músicas</Text>
+                    <AudioListScreen />
+
+                </View>
+
 
             </ScrollView>
 
-            <View style={styles.bottomNavMargin}>
 
-                <View style={styles.bottomNav}>
-                    <TouchableOpacity onPress={goHome}>
-                        <Ionicons name="home-outline" size={30} color="pink" />
-                    </TouchableOpacity>
+            <View style={styles.bottomNav}>
+                <TouchableOpacity onPress={goHome}>
+                    <Ionicons name="home-outline" size={30} color="pink" />
+                </TouchableOpacity>
 
-                    <TouchableOpacity onPress={goToVideos}>
-                        <Ionicons name="film-outline" size={30} color="pink" />
-                    </TouchableOpacity>
+                <TouchableOpacity onPress={goToVideos}>
+                    <Ionicons name="film-outline" size={30} color="pink" />
+                </TouchableOpacity>
 
-                    <TouchableOpacity>
-                        <View style={styles.circleContainer} >
-                            <Image source={profileImage} style={styles.circleImage} />
-                        </View>
-                    </TouchableOpacity>
+                <TouchableOpacity>
+                    <View style={styles.circleContainer} >
+                        <Image source={profileImage} style={styles.circleImage} />
+                    </View>
+                </TouchableOpacity>
 
-                    <TouchableOpacity >
-                        <Ionicons name="musical-notes-outline" size={30} color="purple" />
-                    </TouchableOpacity>
+                <TouchableOpacity >
+                    <Ionicons name="musical-notes-outline" size={30} color="purple" />
+                </TouchableOpacity>
 
-                    <TouchableOpacity onPress={goToRadio}>
-                        <Ionicons name="radio-outline" size={30} color="pink" />
-                    </TouchableOpacity>
-                </View>
-
+                <TouchableOpacity onPress={goToRadio}>
+                    <Ionicons name="radio-outline" size={30} color="pink" />
+                </TouchableOpacity>
             </View>
+
 
         </>
 
@@ -118,6 +121,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+    },
+    content: {
+        marginBottom: 70,
     },
     header: {
         flexDirection: 'row',
@@ -200,9 +206,6 @@ const styles = StyleSheet.create({
     circleImage: {
         width: '100%',
         height: '100%',
-    },
-    bottomNavMargin: {
-        paddingTop: 70,
     },
 });
 
