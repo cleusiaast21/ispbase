@@ -71,6 +71,9 @@ export default function Home({ route }) {
                     <View style={styles.header}>
                         <Text style={styles.label}>Olá, {personName}!</Text>
 
+                        <Ionicons style={styles.iconSearch} name="search" size={40} color="pink" />
+
+
                         <TouchableOpacity onPress={goToProfilePage}>
                             <Image
                                 style={styles.profileImage}
@@ -144,22 +147,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     content: {
-        marginBottom: 70,
+        marginBottom: '20%',
     },
     header: {
         flexDirection: 'row',
-        marginTop: 45,
+        marginTop: '10%',
         justifyContent: 'space-between',
     },
     iconSearch: {
-        marginRight: 5,
+        marginLeft: '20%',
         marginTop: 15,
     },
     profileImage: {
         width: 60,
         height: 60,
         borderRadius: 40,
-        marginRight: 10,
+        marginRight: '3%',
+        marginTop: '3%',
     },
     label: {
         fontWeight: 'bold',

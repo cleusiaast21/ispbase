@@ -27,8 +27,8 @@ export default function ArtistListScreen() {
   };
 
   function goToArtistPage(item) {
-    /*const registeredPersonId = personId;
-    navigation.navigate('ArtistPage', { item.id });*/
+    const registeredPersonId = personId;
+    navigation.navigate('ArtistPage', { item });
   }
 
 
