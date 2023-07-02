@@ -315,16 +315,28 @@ export default function Profile({ route }) {
         </View>
         <Text style={styles.label}>{personName} {personSurname}</Text>
 
+
         <View style={styles.options}>
           <TouchableOpacity
-            style={[styles.button, activeButton === 'ver-meus-videos' && styles.activeButton]} // Apply activeButton style if activeButton is 'ver-meus-videos'
+            style={[styles.button, activeButton === 'ver-meus-videos' && styles.activeButton]} 
             onPress={() => {
               setActiveButton('ver-meus-videos');
               setShowForm(false);
               setShowMidia(true);
             }}
           >
-            <Text style={styles.buttonText}>Ver meus mídias</Text>
+            <Text style={styles.buttonText}>Meus mídias</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button, activeButton === 'criar-album' && styles.activeButton]} 
+            onPress={() => {
+              setActiveButton('criar-album');
+              setShowForm(false);
+              setShowMidia(false);
+            }}
+          >
+            <Text style={styles.buttonText}>Criar álbum</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -336,7 +348,7 @@ export default function Profile({ route }) {
             }}
             style={[styles.button, activeButton === 'postar-novo-midia' && styles.activeButton]}
           >
-            <Text style={styles.buttonText}>Postar novo mídia</Text>
+            <Text style={styles.buttonText}>Novo mídia</Text>
           </TouchableOpacity>
         </View>
       </View>
