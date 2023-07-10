@@ -25,12 +25,8 @@ export default function Search() {
                 results.push(videoData);
             });
 
-            alert(results)
-
 
             setSearchResults(results);
-
-
 
             const results1 = [];
 
