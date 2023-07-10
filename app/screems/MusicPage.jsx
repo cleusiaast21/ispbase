@@ -101,13 +101,18 @@ export default function MusicPage({ route }) {
   const handleDownloadAudio = async () => {
     try {
       setLoadingAudio(true); // Start loading
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
       // Create a folder for the audio files
       const folderName = 'ISPMEDIA';
       const folderInfo = await FileSystem.getInfoAsync(FileSystem.documentDirectory + folderName);
       if (!folderInfo.exists) {
         await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + folderName);
       }
+<<<<<<< HEAD
 
       // Get the file extension from the URL
       const fileExtension = item.url.substring(item.url.lastIndexOf('.') + 1);
@@ -115,10 +120,20 @@ export default function MusicPage({ route }) {
       // Create a unique file name using a timestamp
       const fileName = `ispmedia_${Date.now()}.${fileExtension}`;
 
+=======
+  
+      // Get the file extension from the URL
+      const fileExtension = item.url.substring(item.url.lastIndexOf('.') + 1);
+  
+      // Create a unique file name using a timestamp
+      const fileName = `ispmedia_${Date.now()}.${fileExtension}`;
+  
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
       // Create the file path by combining the folder path and file name
       const filePath = FileSystem.documentDirectory + folderName + '/' + fileName;
 
       console.log('Downloading audio');
+<<<<<<< HEAD
 
       // Download the audio file
       const downloadResumable = FileSystem.createDownloadResumable(item.url, filePath);
@@ -126,6 +141,15 @@ export default function MusicPage({ route }) {
 
       setLoadingAudio(false); // Stop loading
 
+=======
+  
+      // Download the audio file
+      const downloadResumable = FileSystem.createDownloadResumable(item.url, filePath);
+      const { uri } = await downloadResumable.downloadAsync();
+  
+      setLoadingAudio(false); // Stop loading
+  
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
       console.log('Audio downloaded:', uri);
       Alert.alert('Success', 'Áudio baixado com sucesso.');
     } catch (error) {
@@ -133,8 +157,13 @@ export default function MusicPage({ route }) {
     }
   };
 
+<<<<<<< HEAD
 
 
+=======
+  
+  
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
 
   return (
     <Animated.View style={[styles.container, pan.getLayout()]} {...panResponder.panHandlers}>
@@ -184,11 +213,14 @@ export default function MusicPage({ route }) {
         />
 
         <View style={styles.controls}>
+<<<<<<< HEAD
 
           <TouchableOpacity>
             <Ionicons name="play-back-outline" size={60} color="pink"/>
           </TouchableOpacity>
 
+=======
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
           <TouchableOpacity onPress={handlePlayAudio} disabled={loading}>
             {loading ? (
               <ActivityIndicator size="large" color="pink" />
@@ -198,11 +230,14 @@ export default function MusicPage({ route }) {
               <Ionicons name="play-circle" size={100} color="pink" />
             )}
           </TouchableOpacity>
+<<<<<<< HEAD
 
           <TouchableOpacity>
             <Ionicons name="play-forward-outline" size={60} color="pink"/>
           </TouchableOpacity>
 
+=======
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
         </View>
       </View>
     </Animated.View>
@@ -268,7 +303,11 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     width: 250,
     alignItems: 'center',
+<<<<<<< HEAD
     justifyContent: 'space-between',
+=======
+    justifyContent: 'center',
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
   },
   slider: {
     width: 300,

@@ -47,10 +47,13 @@ export default function Home({ route }) {
         navigation.navigate('Radio', { personId: registeredPersonId });
     }
 
+<<<<<<< HEAD
     function search() {
         navigation.navigate('Search');
     }
 
+=======
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
     function goToVideos() {
         const registeredPersonId = personId;
         navigation.navigate('Videos', { personId: registeredPersonId });
@@ -69,6 +72,7 @@ export default function Home({ route }) {
     return (
 
         <>
+<<<<<<< HEAD
 
             <ScrollView style={styles.container}>
 
@@ -133,6 +137,70 @@ export default function Home({ route }) {
                     <Ionicons name="radio-outline" size={30} color="pink" />
                 </TouchableOpacity>
             </View>
+=======
+            
+                <ScrollView style={styles.container}>
+
+                    <View style={styles.header}>
+                        <Text style={styles.label}>Olá, {personName}!</Text>
+
+                        <Ionicons style={styles.iconSearch} name="search" size={40} color="pink" />
+
+
+                        <TouchableOpacity onPress={goToProfilePage}>
+                            <Image
+                                style={styles.profileImage}
+                                source={profileImageUrl ? { uri: profileImageUrl } : require('../assets/loading.jpg')}
+                            />
+                        </TouchableOpacity>
+
+                    </View>
+
+                    <View style={styles.content}>
+
+
+                        <Text style={styles.sectionTitle}>Videos</Text>
+                        <VideoListScreen />
+
+                        <Text style={styles.sectionTitle}>Áudios</Text>
+                        <AudioListScreen />
+
+                        <Text style={styles.sectionTitle}>Artistas Recomendados</Text>
+                        <ArtistListScreen />
+
+                        <Text style={styles.sectionTitle}>Estações de Rádio</Text>
+                        <RadioListScreen />
+
+                    </View>
+
+
+                </ScrollView>
+
+
+                <View style={styles.bottomNav}>
+                    <TouchableOpacity >
+                        <Ionicons style={styles.homeIcon} name="home-outline" size={30} color="purple" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={goToVideos}>
+                        <Ionicons name="film-outline" size={30} color="pink" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity>
+                        <View style={styles.circleContainer} >
+                            <Image source={profileImage} style={styles.circleImage} />
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={goToSongs}>
+                        <Ionicons name="musical-notes-outline" size={30} color="pink" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={goToRadio}>
+                        <Ionicons name="radio-outline" size={30} color="pink" />
+                    </TouchableOpacity>
+                </View>
+>>>>>>> e9a632213529df74301800dbdd38bd845733458f
 
 
         </>
