@@ -27,8 +27,8 @@ export default function ArtistListScreen() {
   };
 
   function goToArtistPage(item) {
-    const registeredPersonId = personId;
-    navigation.navigate('ArtistPage', { item });
+    const registeredPersonId = item.email;
+    navigation.navigate('ArtistPage',{ email: registeredPersonId });
   }
 
 

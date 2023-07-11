@@ -229,11 +229,7 @@ export default function Profile({ route }) {
           await addDoc(audiosCollection, audioData);
 
           console.log('Áudio enviado com sucesso!');
-<<<<<<< HEAD
           Alert.alert('Sucesso','Áudio enviado com sucesso!');
-=======
-          alert('Áudio enviado com sucesso!');
->>>>>>> e9a632213529df74301800dbdd38bd845733458f
 
         } catch (error) {
           console.error('Erro ao enviar o áudio:', error);
@@ -276,11 +272,7 @@ export default function Profile({ route }) {
           });
 
           console.log('Video successfully uploaded to the database!');
-<<<<<<< HEAD
           Alert.alert('Sucesso','Vídeo enviado com sucesso!');
-=======
-          alert('Vídeo enviado com sucesso!');
->>>>>>> e9a632213529df74301800dbdd38bd845733458f
 
 
         } catch (error) {

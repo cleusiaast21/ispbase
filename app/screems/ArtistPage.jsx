@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Button, Alert, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc, updateDoc, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc, updateDoc, addDoc, getDocs, where } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { FIREBASE_DB, FIREBASE_STORAGE } from '../../FirebaseConfig';
 import * as DocumentPicker from 'expo-document-picker';
 import { useNavigation } from '@react-navigation/native';
 import { v4 as uuidv4 } from 'uuid';
 import { Ionicons } from '@expo/vector-icons';
-import ArtistMedia from './ArtistMedia';
+import ArtistMedia from './ArtistsMedia';
 
 
 export default function ArtistPage({ route }) {
 
     const navigation = useNavigation();
 
-    const { personId } = route.params;
+    const { email } = route.params;
+
+    const [id, setId] = useState('');
     const [personName, setPersonName] = useState('');
     const [personSurname, setPersonSurname] = useState('');
     const [profileImageUrl, setProfileImageUrl] = useState(null);
@@ -32,22 +34,28 @@ export default function ArtistPage({ route }) {
     useEffect(() => {
         const fetchPersonData = async () => {
             try {
-                const docRef = doc(FIREBASE_DB, 'pessoa', personId);
-                const docSnapshot = await getDoc(docRef);
 
-                if (docSnapshot.exists()) {
-                    const data = docSnapshot.data();
+                const docRef = collection(FIREBASE_DB, 'pessoa');
+                const docSnapshot = await getDocs(
+                    query(docRef, where('email', '==', email))
+                );
+
+                docSnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    setId(doc.id);
                     setPersonName(data.name);
                     setPersonSurname(data.surname);
                     setProfileImageUrl(data.imageUrl || null);
-                }
+                });
+
+
             } catch (error) {
                 console.log('Error fetching person data:', error);
             }
         };
 
         fetchPersonData();
-    }, [personId]);
+    }, [email]);
 
 
 
@@ -70,86 +78,10 @@ export default function ArtistPage({ route }) {
                 </View>
                 <Text style={styles.label}>{personName} {personSurname}</Text>
 
-                <View style={styles.options}>
-                    <TouchableOpacity
-                        style={[styles.button, activeButton === 'ver-meus-videos' && styles.activeButton]} // Apply activeButton style if activeButton is 'ver-meus-videos'
-                        onPress={() => {
-                            setActiveButton('ver-meus-videos');
-                            setShowForm(false);
-                            setShowMidia(true);
-                        }}
-                    >
-                        <Text style={styles.buttonText}>Ver meus mídias</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => {
-                            setActiveButton('postar-novo-midia');
-                            setShowForm(true);
-                            setShowMidia(false);
-
-                        }}
-                        style={[styles.button, activeButton === 'postar-novo-midia' && styles.activeButton]}
-                    >
-                        <Text style={styles.buttonText}>Postar novo mídia</Text>
-                    </TouchableOpacity>
+                <View style={styles.formContainer}>
+                    <ArtistMedia artistId={id} />
                 </View>
             </View>
-            
-
-            {showMidia && (
-                <View style={styles.formContainer}>
-
-                    <ArtistMedia artistId={personId} />
-
-                </View>
-
-            )}
-
-
-            {showForm && (
-                <View style={styles.formContainer}>
-
-                    <Text style={styles.info}>Forneça as informacões do mídia: </Text>
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Título"
-                        value={title}
-                        placeholderTextColor={'white'}
-                        onChangeText={setTitle}
-                    />
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Descrição"
-                        placeholderTextColor={'white'}
-                        value={description}
-                        onChangeText={setDescription}
-                    />
-
-                    <TouchableOpacity style={styles.thumbnailButton} onPress={pickImage}>
-                        {thumbnailUri ? (
-                            <Text style={{ color: 'green' }}>Thumbnail selecionada</Text>
-                        ) : (
-                            <Text style={styles.thumbnailButtonText}>Selecionar Thumbnail</Text>
-                        )}
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.itemButton} onPress={handleItemSelection}>
-                        {itemUri ? (
-                            <Text style={styles.itemButtonText}>{itemType === 'audio' ? <Text style={{ color: 'green' }}>Audio selecionado</Text> : <Text style={{ color: 'green' }}>Video selecionado</Text>}</Text>
-                        ) : (
-                            <Text style={styles.itemButtonText}>Selecionar Item</Text>
-                        )}
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.uploadButton} onPress={handleUploadNewItem}>
-                        <Text style={styles.uploadButtonText}>Upload</Text>
-                    </TouchableOpacity>
-
-                </View>
-            )}
 
         </View>
     );

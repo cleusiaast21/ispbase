@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, ImageBackground, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STORAGE, FIREBASE_DB } from '../../FirebaseConfig';
@@ -71,8 +71,14 @@ export default function Register() {
 
 
   return (
-    <>
-      <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView contentContainerStyle={styles.scrollView}>
+
+
+        <View style={styles.container}>
 
 
 
@@ -128,8 +134,10 @@ export default function Register() {
 
 
 
-      </View>
-    </>
+        </View>
+      </ScrollView>
+
+    </KeyboardAvoidingView>
   )
 
 
@@ -148,6 +156,11 @@ const styles = StyleSheet.create({
     height: 155,
     marginTop: 20,
     marginBottom: 50,
+  },
+  
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   inputView: {
     width: 300,
@@ -182,6 +195,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     opacity: 0.7,
     alignSelf: 'center',
+    marginTop: 10,
+
   },
 });
 

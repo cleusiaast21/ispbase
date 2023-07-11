@@ -32,7 +32,7 @@ export default function AudioListScreen() {
     <View>
       <FlatList
         data={audios}
-        keyExtractor={(item) => item.title}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View >
             <TouchableOpacity onPress={() => goToMusicPage(item)}>

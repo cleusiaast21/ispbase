@@ -11,11 +11,7 @@ import Songs from './app/screems/Songs';
 import MusicPage from './app/screems/MusicPage';
 import ArtistPage from './app/screems/ArtistPage';
 import PlaylistPage from './app/screems/PlaylistPage';
-<<<<<<< HEAD
 import Search from './app/screems/Search';
-=======
->>>>>>> e9a632213529df74301800dbdd38bd845733458f
-
 const Stack = createStackNavigator();
 
 
@@ -63,13 +59,11 @@ const App = () => {
         <Stack.Screen name="PlaylistPage"
           component={PlaylistPage}
           options={{ headerShown: false }} />
-<<<<<<< HEAD
 
         <Stack.Screen name="Search"
           component={Search}
           options={{ headerShown: false }} />
-=======
->>>>>>> e9a632213529df74301800dbdd38bd845733458f
+          
       </Stack.Navigator>
     </NavigationContainer>
   );

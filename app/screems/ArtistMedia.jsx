@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
 import { FlatList, Image, Text, TouchableOpacity, View, StyleSheet,TextInput } from 'react-native';
 import { collection, getDocs, query, getFirestore, where, doc, updateDoc } from 'firebase/firestore';
-=======
-import {
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  TextInput,
-} from 'react-native';
-import {
-  collection,
-  getDocs,
-  query,
-  getFirestore,
-  where,
-  doc,
-  updateDoc,
-} from 'firebase/firestore';
->>>>>>> e9a632213529df74301800dbdd38bd845733458f
 import { FIREBASE_DB, FIREBASE_STORAGE } from '../../FirebaseConfig';
 
+
 const MediaItem = ({ item, onEdit }) => {
+  
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(item.title);
   const [description, setDescription] = useState(item.description);
@@ -91,6 +72,7 @@ const MediaItem = ({ item, onEdit }) => {
             <Text style={styles.uploadButtonText}>
               {editing ? 'Cancel' : 'Editar'}
             </Text>
+            
           </TouchableOpacity>
         </View>
       </View>
@@ -100,11 +82,8 @@ const MediaItem = ({ item, onEdit }) => {
 
 export default function AudioListScreen({ artistId }) {
   const [audios, setAudios] = useState([]);
-<<<<<<< HEAD
   const [videos, setVideos] = useState([]);
 
-=======
->>>>>>> e9a632213529df74301800dbdd38bd845733458f
 
   useEffect(() => {
     fetchAudios();
@@ -194,11 +173,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '80%',
-<<<<<<< HEAD
-    height: 30,
-=======
     height: 40,
->>>>>>> e9a632213529df74301800dbdd38bd845733458f
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 10,
