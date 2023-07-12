@@ -1,17 +1,19 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Login from './app/screems/Login';
-import Register from './app/screems/Register';
-import Home from './app/screems/Home';
-import ProfilePage from './app/screems/ProfilePage';
-import Radio from './app/screems/Radio';
-import Videos from './app/screems/Videos';
-import Songs from './app/screems/Songs';
-import MusicPage from './app/screems/MusicPage';
-import ArtistPage from './app/screems/ArtistPage';
-import PlaylistPage from './app/screems/PlaylistPage';
-import Search from './app/screems/Search';
+import Login from './app/screens/Login';
+import Register from './app/screens/Register';
+import Home from './app/screens/Home';
+import ProfilePage from './app/screens/ProfilePage';
+import Radio from './app/screens/Radio';
+import Videos from './app/screens/Videos';
+import Songs from './app/screens/Songs';
+import MusicPage from './app/screens/MusicPage';
+import ArtistPage from './app/screens/ArtistPage';
+import PlaylistPage from './app/screens/PlaylistPage';
+import Search from './app/screens/Search';
+import FirstPage from './app/screens/FirstPage';
+
 const Stack = createStackNavigator();
 
 
@@ -19,6 +21,10 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Login'>
+
+      <Stack.Screen name="FirstPage"
+          component={FirstPage}
+          options={{ headerShown: false }} />
 
         <Stack.Screen name="ProfilePage"
           component={ProfilePage}
