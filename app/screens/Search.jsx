@@ -83,7 +83,7 @@ export default function Search() {
                 </TouchableOpacity>
             </View>
 
-            <Text>Vídeos</Text>
+            <Text style={{color: 'pink', fontSize: 25, fontWeight:'bold'}}>Vídeos</Text>
 
             <View style={styles.resultsContainer}>
                 {isLoading ? (
@@ -95,7 +95,7 @@ export default function Search() {
                 )}
             </View>
 
-            <Text>Áudios</Text>
+            <Text style={{color: 'pink', fontSize: 25, fontWeight:'bold'}}>Áudios</Text>
 
             <View style={styles.resultsContainer}>
                 {isLoading ? (
@@ -107,7 +107,7 @@ export default function Search() {
                 )}
             </View>
 
-            <Text>Artistas</Text>
+            <Text style={{color: 'pink', fontSize: 25, fontWeight:'bold'}}>Artistas</Text>
 
             <View style={styles.resultsContainer}>
                 {isLoading ? (
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         color: 'grey',
         opacity: 0.5,
         paddingTop: 15,
-        marginTop: 10,
+        marginTop: 20,
         marginBottom: 10,
     },
     inputContainer: {

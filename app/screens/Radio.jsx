@@ -145,6 +145,8 @@ const styles = StyleSheet.create({
         opacity: 0.5,
         paddingTop: 15,
         paddingLeft: 10,
+        color: 'grey',
+        opacity: 0.5,
     },
     scrollContainer: {
         marginTop: 5,
@@ -156,6 +158,8 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginBottom: 5,
         marginTop: 30,
+        color: 'grey',
+        opacity: 0.5,
     },
     horizontalItem: {
         marginLeft: 10,

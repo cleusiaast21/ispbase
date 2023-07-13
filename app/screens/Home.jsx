@@ -97,7 +97,7 @@ export default function Home({ route }) {
 
                 <View style={styles.content}>
 
-                    <Text style={styles.sectionTitle}>Videos</Text>
+                    <Text style={styles.sectionTitle}>Vídeos</Text>
                     <VideoListScreen />
 
                     <Text style={styles.sectionTitle}>Áudios</Text>
@@ -204,6 +204,8 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginBottom: 5,
         marginTop: 30,
+        color: 'grey',
+        opacity: 0.5,
     },
     horizontalItem: {
         marginLeft: 10,

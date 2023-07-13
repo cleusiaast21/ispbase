@@ -3,9 +3,37 @@ import { Text, View, Button, StyleSheet, Image, FlatList } from 'react-native';
 import { FIREBASE_DB } from '../../FirebaseConfig';
 import { getFirestore, collection, onSnapshot } from 'firebase/firestore';
 import { Audio } from 'expo-av';
+import mais from '../assets/radiomais.webp'
+import airfm from '../assets/airfm.png'
+import lac from '../assets/lac.webp'
+import escola from '../assets/escola.png'
 
 const RadioListScreen = () => {
   const [radios, setRadios] = useState([]);
+
+  // Creating an array of radios
+  const radios1 = [
+    {
+      frequency: "https://radios.vpn.sapo.pt/AO/radio1.mp3",
+      thumbnailUrl: mais,
+      name: "Rádio Mais"
+    },
+    {
+      frequency: "https://goldenwest.leanstream.co/CFITFM-MP3?args_02",
+      thumbnailUrl: airfm,
+      name: "Air FM"
+    },
+    {
+      frequency: "https://radios.justweb.pt/8050/stream/?1685627470876",
+      thumbnailUrl: lac,
+      name: "LAC"
+    },
+    {
+      frequency: "https://radios.vpn.sapo.pt/AO/radio14.mp3?1685629053605",
+      thumbnailUrl: escola,
+      name: "Rádio Escola"
+    }
+  ];
 
   useEffect(() => {
     const fetchRadios = async () => {
@@ -70,13 +98,13 @@ const RadioListScreen = () => {
   return (
     <View>
 
-      <FlatList 
+      <FlatList
         data={radios}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View key={item.id}>
             <Image source={{ uri: item.thumbnailURL }} style={styles.item} />
-            <Text>{item.name}</Text>
+            <Text style={{color: 'pink', justifyContent: 'center', alignSelf: 'center'}}>{item.name}</Text>
             <Button style={styles.button}
               title={item.isLoading ? 'Carregando' : item.isPlaying ? 'Pause' : 'Play'}
               disabled={item.isLoading}
@@ -97,11 +125,13 @@ const styles = StyleSheet.create({
     height: 100,
     padding: 10,
     margin: 10,
+    borderWidth: 1,
+    borderColor: 'pink',
+    borderRadius: 10,
   },
   button: {
     marginBottom: 700,
-    color:  'pink',
-
+    color: 'pink',
   }
 });
 

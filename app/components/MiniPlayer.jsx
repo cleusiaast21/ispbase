@@ -107,6 +107,14 @@ const MiniPlayer = ({ audio }) => {
     }
   };
 
+  const [isFilled, setIsFilled] = useState(false);
+
+  const handleHeartPress = () => {
+    if (!isFilled) {
+      setIsFilled(true);
+    }
+  };
+
   const onHandlerStateChange = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       const { translationY } = event.nativeEvent;
@@ -161,7 +169,7 @@ const MiniPlayer = ({ audio }) => {
             { height: playerHeight, transform: [{ translateY: panY }] }
           ]}
         >
-         
+
           <View style={styles.contentContainer}>
             <Animated.Image
               style={[styles.albumCover, { width: imageSize, height: imageSize }]}
@@ -182,9 +190,10 @@ const MiniPlayer = ({ audio }) => {
               )}
             </TouchableOpacity>
 
+
           </View>
 
-          {isExpanded && ( // Renderiza o Slider somente se o mini player estiver expandido
+          {isExpanded && (
             <Slider
               style={styles.slider}
               minimumValue={0}
@@ -201,7 +210,7 @@ const MiniPlayer = ({ audio }) => {
 
         </Animated.View>
       </PanGestureHandler>
-    </View>
+    </View >
   );
 };
 
@@ -238,11 +247,14 @@ const styles = StyleSheet.create({
   },
   songTitle: {
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'pink',
   },
   artistName: {
     fontSize: 14,
-    color: '#888888'
+    color: '#888888',
+    color: 'pink',
+
   },
   slider: {
     width: 300,
